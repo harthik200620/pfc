@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" preserveAspectRatio="xMidYMid slice" role="img" aria-label="The PFC storefront on the PAN Loop at blue hour">
+  <title>PFC — PAN Loop Fast Food Center, at blue hour</title>
+  <desc>Drawn from the storefront: asymmetric black gabled roof with brass trim, a white enamel medallion, red PFC lettering, an open service counter under tungsten light, a terracotta brick wall with planters, and a monsoon tree canopy overhead. Replace with a photograph — see README.</desc>
+
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#04140f"/>
+      <stop offset="55%" stop-color="#072b1f"/>
+      <stop offset="100%" stop-color="#0c3f2d"/>
+    </linearGradient>
+    <linearGradient id="canopy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#020c08"/>
+      <stop offset="70%" stop-color="#0a3527"/>
+      <stop offset="100%" stop-color="#10513a"/>
+    </linearGradient>
+    <linearGradient id="roof" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#161c1a"/>
+      <stop offset="100%" stop-color="#080e0c"/>
+    </linearGradient>
+    <linearGradient id="brassTrim" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8a6c2c"/>
+      <stop offset="45%" stop-color="#e0bd6a"/>
+      <stop offset="100%" stop-color="#9b7c35"/>
+    </linearGradient>
+    <linearGradient id="counterGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd9a0"/>
+      <stop offset="60%" stop-color="#e8a44e"/>
+      <stop offset="100%" stop-color="#a35f1c"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5a2318"/>
+      <stop offset="45%" stop-color="#3d1710"/>
+      <stop offset="100%" stop-color="#1a0b08"/>
+    </linearGradient>
+    <linearGradient id="brick" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7d3324"/>
+      <stop offset="100%" stop-color="#4a1d15"/>
+    </linearGradient>
+    <radialGradient id="spill" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#ffbf6b" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffbf6b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haze" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#17a673" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#17a673" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="26"/></filter>
+    <filter id="softer"><feGaussianBlur stdDeviation="60"/></filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+
+  <!-- monsoon canopy -->
+  <g fill="url(#canopy)">
+    <path d="M0 0h1920v250c-120 44-210-18-330 12s-186 74-316 52-206-84-330-64-198 88-330 70S196 246 96 268 0 300 0 300Z"/>
+    <ellipse cx="240" cy="196" rx="300" ry="150" opacity="0.85"/>
+    <ellipse cx="760" cy="150" rx="340" ry="140" opacity="0.8"/>
+    <ellipse cx="1320" cy="188" rx="320" ry="152" opacity="0.85"/>
+    <ellipse cx="1780" cy="230" rx="280" ry="180" opacity="0.9"/>
+  </g>
+  <g fill="#0d4230" opacity="0.55" filter="url(#soft)">
+    <ellipse cx="520" cy="236" rx="190" ry="80"/>
+    <ellipse cx="1120" cy="212" rx="210" ry="76"/>
+    <ellipse cx="1620" cy="266" rx="180" ry="86"/>
+  </g>
+
+  <!-- forecourt -->
+  <rect y="768" width="1920" height="312" fill="url(#ground)"/>
+
+  <!-- building mass -->
+  <rect x="330" y="470" width="1180" height="310" fill="#0b1310"/>
+
+  <!-- asymmetric gable: steep left, long shallow right -->
+  <path d="M300 486 L742 214 L1560 470 L1560 500 L742 258 L300 516 Z" fill="url(#roof)"/>
+  <path d="M300 486 L742 214 L1560 470" fill="none" stroke="url(#brassTrim)" stroke-width="7"/>
+  <path d="M300 516 L300 486 L742 214 L1560 470 L1560 500 L742 258 Z" fill="#0e1614" opacity="0.55"/>
+
+  <!-- roof panelling -->
+  <g stroke="#1b2521" stroke-width="2" opacity="0.75">
+    <path d="M360 486 L742 250"/><path d="M440 470 L742 282"/><path d="M540 452 L742 316"/>
+    <path d="M860 274 L1180 372"/><path d="M980 310 L1300 410"/><path d="M1100 346 L1420 446"/>
+  </g>
+
+  <!-- enamel medallion at the apex -->
+  <circle cx="742" cy="200" r="46" fill="#f2f6f3"/>
+  <circle cx="742" cy="200" r="46" fill="none" stroke="url(#brassTrim)" stroke-width="4"/>
+  <circle cx="742" cy="200" r="27" fill="none" stroke="#0e6e4e" stroke-width="5"/>
+
+  <!-- red slat panels flanking the sign -->
+  <rect x="470" y="500" width="200" height="34" rx="4" fill="#b23320"/>
+  <rect x="470" y="546" width="200" height="34" rx="4" fill="#8f2618"/>
+  <rect x="1030" y="500" width="230" height="34" rx="4" fill="#b23320"/>
+  <rect x="1030" y="546" width="230" height="34" rx="4" fill="#8f2618"/>
+
+  <!-- dimensional PFC letters -->
+  <g fill="#d4402a" stroke="#6d1a10" stroke-width="4" stroke-linejoin="round">
+    <path d="M726 496h44a34 34 0 0 1 0 68h-24v42h-20Zm20 20v28h24a14 14 0 0 0 0-28Z"/>
+    <path d="M812 496h84v20h-64v26h54v20h-54v44h-20Z"/>
+    <path d="M986 512a58 58 0 1 0 0 82l14 15a78 78 0 1 1 0-112Z"/>
+  </g>
+
+  <!-- open service counter, tungsten spill -->
+  <rect x="392" y="600" width="1058" height="168" fill="#0a0f0d"/>
+  <rect x="410" y="614" width="1022" height="132" fill="url(#counterGlow)" opacity="0.9"/>
+  <g fill="#0a0f0d" opacity="0.85">
+    <rect x="430" y="614" width="9" height="132"/><rect x="486" y="614" width="9" height="132"/>
+    <rect x="542" y="614" width="9" height="132"/><rect x="598" y="614" width="9" height="132"/>
+    <rect x="654" y="614" width="9" height="132"/><rect x="710" y="614" width="9" height="132"/>
+    <rect x="766" y="614" width="9" height="132"/><rect x="822" y="614" width="9" height="132"/>
+    <rect x="878" y="614" width="9" height="132"/><rect x="934" y="614" width="9" height="132"/>
+    <rect x="990" y="614" width="9" height="132"/><rect x="1046" y="614" width="9" height="132"/>
+    <rect x="1102" y="614" width="9" height="132"/><rect x="1158" y="614" width="9" height="132"/>
+    <rect x="1214" y="614" width="9" height="132"/><rect x="1270" y="614" width="9" height="132"/>
+    <rect x="1326" y="614" width="9" height="132"/><rect x="1382" y="614" width="9" height="132"/>
+  </g>
+  <rect x="392" y="756" width="1058" height="14" fill="url(#brassTrim)" opacity="0.7"/>
+  <ellipse cx="920" cy="820" rx="620" ry="130" fill="url(#spill)"/>
+
+  <!-- damp reflection of the counter on the oxide-red concrete -->
+  <rect x="440" y="776" width="960" height="96" fill="#e8a44e" opacity="0.10" filter="url(#soft)"/>
+
+  <!-- terracotta brick wall, right -->
+  <rect x="1470" y="640" width="450" height="200" fill="url(#brick)"/>
+  <g stroke="#c9b39a" stroke-width="2.5" opacity="0.5">
+    <path d="M1470 672h450"/><path d="M1470 704h450"/><path d="M1470 736h450"/><path d="M1470 768h450"/><path d="M1470 800h450"/>
+    <path d="M1510 640v32"/><path d="M1590 640v32"/><path d="M1670 640v32"/><path d="M1750 640v32"/><path d="M1830 640v32"/>
+    <path d="M1550 672v32"/><path d="M1630 672v32"/><path d="M1710 672v32"/><path d="M1790 672v32"/><path d="M1870 672v32"/>
+    <path d="M1510 704v32"/><path d="M1590 704v32"/><path d="M1670 704v32"/><path d="M1750 704v32"/><path d="M1830 704v32"/>
+    <path d="M1550 736v32"/><path d="M1630 736v32"/><path d="M1710 736v32"/><path d="M1790 736v32"/><path d="M1870 736v32"/>
+  </g>
+  <rect x="1470" y="628" width="450" height="16" fill="#8b5a3c"/>
+
+  <!-- planters on the wall -->
+  <g>
+    <rect x="1512" y="576" width="76" height="54" rx="5" fill="#9c5230"/>
+    <ellipse cx="1550" cy="566" rx="46" ry="30" fill="#12563d"/>
+    <rect x="1668" y="576" width="76" height="54" rx="5" fill="#1a1f1c"/>
+    <ellipse cx="1706" cy="562" rx="50" ry="34" fill="#0f4a35"/>
+    <rect x="1824" y="576" width="76" height="54" rx="5" fill="#9c5230"/>
+    <ellipse cx="1862" cy="566" rx="46" ry="30" fill="#12563d"/>
+  </g>
+
+  <!-- topiary, left foreground -->
+  <g>
+    <rect x="150" y="792" width="104" height="84" rx="6" fill="#9c5230"/>
+    <circle cx="202" cy="742" r="62" fill="#0f4a35"/>
+    <circle cx="202" cy="742" r="62" fill="#146b4b" opacity="0.5"/>
+    <rect x="300" y="812" width="88" height="72" rx="6" fill="#8a4629"/>
+    <circle cx="344" cy="774" r="50" fill="#0d4231"/>
+  </g>
+
+  <!-- yellow-ochre pillar, far left edge -->
+  <rect x="0" y="330" width="96" height="620" fill="#8a7326"/>
+  <rect x="0" y="330" width="34" height="620" fill="#a68b2f"/>
+  <rect x="0" y="330" width="96" height="22" fill="#5d4d18"/>
+
+  <!-- trunk, right edge -->
+  <path d="M1820 0c40 180 10 300 40 460s60 340 30 620h130V0Z" fill="#0a1a14"/>
+  <path d="M1852 60c26 200 4 320 30 470s52 330 26 550" fill="none" stroke="#173c2c" stroke-width="9" opacity="0.8"/>
+
+  <!-- atmospheric haze + emerald light leak -->
+  <rect width="1920" height="1080" fill="url(#haze)"/>
+  <ellipse cx="1560" cy="150" rx="520" ry="300" fill="#17a673" opacity="0.10" filter="url(#softer)"/>
+</svg>

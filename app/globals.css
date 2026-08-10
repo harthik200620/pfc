@@ -1,0 +1,566 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Fonts. Plain @font-face, not next/font/local, on purpose: the Fontshare faces
+   sit behind a download flow and cannot be fetched programmatically, and
+   next/font/local fails the BUILD when a file is missing rather than falling
+   back. With @font-face a missing woff2 degrades to the stack below and the
+   project still runs. Drop the files into public/fonts/ to switch them on —
+   see README.
+--------------------------------------------------------------------------- */
+
+/* Fontshare serves these as one static file per weight; Google serves JetBrains
+   Mono as a variable woff2 split by unicode-range. Fetch them with
+   `npm run fonts` — the site runs on the fallback stack without them. */
+
+@font-face {
+  font-family: "Gambarino";
+  src: url("/fonts/Gambarino-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/Switzer-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F,
+    U+20A0-20CF, U+2122, U+2191, U+2193, U+2212, U+2215;
+}
+
+/* ---------------------------------------------------------------------------
+   Tokens. Every colour is pulled from the storefront photograph.
+   Contrast against --ink, measured: jade-mist 15.6:1, brass 7.5:1,
+   emerald-lit 5.7:1, chilli-lit 4.9:1, chilli 3.3:1.
+   --chilli MARKS (veg dot, spice pips — 3:1 threshold applies).
+   --chilli-lit SPEAKS (any text — 4.5:1 threshold applies).
+--------------------------------------------------------------------------- */
+
+@theme {
+  --color-ink: #051c15;
+  --color-emerald: #0e6e4e;
+  --color-emerald-lit: #17a673;
+  --color-jade-mist: #e8f2ec;
+  --color-brass: #c8a24a;
+  --color-chilli: #c2361f;
+  --color-chilli-lit: #e4573b;
+
+  /* Elevation is emerald at low alpha over ink. No greys anywhere. */
+  --color-surface-1: #0a2a20;
+  --color-surface-2: #0f382a;
+  --color-surface-3: #154536;
+  --color-hairline: #1c5641;
+
+  --font-display: "Gambarino", "Iowan Old Style", "Palatino Linotype", Palatino,
+    Georgia, ui-serif, serif;
+  --font-body: "Switzer", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Cascadia Mono",
+    Consolas, "Liberation Mono", monospace;
+
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  --text-display: clamp(2.75rem, 7vw, 6.5rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.03em;
+  --text-h2: clamp(2rem, 4vw, 3.5rem);
+  --text-h2--line-height: 1.02;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: clamp(1.25rem, 2vw, 1.75rem);
+  --text-h3--line-height: 1.2;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  --text-data: 0.9375rem;
+  --text-data--letter-spacing: 0.02em;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--letter-spacing: 0.18em;
+}
+
+/* ------------------------------------------------------------------ base -- */
+
+@layer base {
+  * {
+    min-width: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Nav is 64px; keep anchored sections clear of it. */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-jade-mist);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-emerald-lit);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-emerald-lit);
+    color: var(--color-ink);
+  }
+
+  /* Tabular figures everywhere the mono is used — prices must not jitter. */
+  .font-mono,
+  [class*="font-mono"] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  dialog::backdrop {
+    background: color-mix(in oklab, var(--color-ink) 82%, transparent);
+    backdrop-filter: blur(6px);
+  }
+}
+
+/* ------------------------------------------------------------ components -- */
+
+@layer components {
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    text-transform: uppercase;
+    color: var(--color-brass);
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  .h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  .h3 {
+    font-family: var(--font-body);
+    font-size: var(--text-h3);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .data {
+    font-family: var(--font-mono);
+    font-size: var(--text-data);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 44px minimum touch target on every control, enforced here rather than
+     remembered at each call site. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 200ms var(--ease-entrance),
+      color 200ms var(--ease-entrance), border-color 200ms var(--ease-entrance),
+      transform 120ms var(--ease-entrance);
+    white-space: nowrap;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: var(--color-emerald-lit);
+    color: var(--color-ink);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: #1fc78b;
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--color-hairline);
+    color: var(--color-jade-mist);
+    background: transparent;
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    border-color: var(--color-emerald-lit);
+    background: color-mix(in oklab, var(--color-emerald) 22%, transparent);
+  }
+
+  .btn-brass {
+    background: var(--color-brass);
+    color: var(--color-ink);
+  }
+
+  .btn-brass:hover:not(:disabled) {
+    background: #dbb75f;
+  }
+
+  .card {
+    background: color-mix(in oklab, var(--color-surface-1) 88%, transparent);
+    border: 1px solid var(--color-hairline);
+    border-radius: 1rem;
+  }
+
+  .field {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.625rem 0.875rem;
+    background: var(--color-ink);
+    border: 1px solid var(--color-hairline);
+    border-radius: 0.625rem;
+    color: var(--color-jade-mist);
+    font-size: 1rem; /* 16px — anything smaller zooms on iOS focus. */
+    transition: border-color 200ms var(--ease-entrance);
+  }
+
+  .field::placeholder {
+    color: color-mix(in oklab, var(--color-jade-mist) 40%, transparent);
+  }
+
+  .field:hover {
+    border-color: color-mix(in oklab, var(--color-emerald-lit) 50%, transparent);
+  }
+
+  .field[aria-invalid="true"] {
+    border-color: var(--color-chilli-lit);
+  }
+
+  .section {
+    padding-block: clamp(3.5rem, 9vw, 7.5rem);
+  }
+
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 2.5rem);
+  }
+
+  .hairline {
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ----------------------------------------------------------------- grain -- */
+
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+}
+
+/* --------------------------------------------------------------- motion --- */
+/* Native scroll-driven animations only. No JS scroll listeners, no library:
+   these run on the compositor, which is what keeps them at 60fps on the
+   mid-range Android this audience is holding.
+
+   animation-range is left at its default deliberately. Firefox ships
+   animation-timeline (132+) but not full animation-range support, and a custom
+   range there runs over the wrong window — which reads as broken, where an
+   absent animation reads as fine. */
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-parallax {
+  from {
+    transform: scale(1.12) translateY(0);
+  }
+  to {
+    transform: scale(1.12) translateY(14%);
+  }
+}
+
+@keyframes rule-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Base state is VISIBLE. If scroll-driven animations are unsupported the
+   content simply shows — the fallback needs no extra rule. */
+.reveal {
+  opacity: 1;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+    }
+
+    .hero-plate {
+      animation: hero-parallax linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    .progress-rule {
+      animation: rule-progress linear both;
+      animation-timeline: scroll(nearest inline);
+      transform-origin: left center;
+    }
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 48s linear infinite;
+  will-change: transform;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+
+.live-dot {
+  animation: live-pulse 2.4s var(--ease-entrance) infinite;
+}
+
+@keyframes route-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.route-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: route-draw 620ms var(--ease-entrance) both;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.anim-sheet {
+  animation: sheet-up 320ms var(--ease-entrance) both;
+}
+.anim-panel {
+  animation: panel-in 320ms var(--ease-entrance) both;
+}
+.anim-fade {
+  animation: fade-in 200ms var(--ease-entrance) both;
+}
+.anim-pop {
+  animation: pop-in 320ms var(--ease-entrance) both;
+}
+
+/* Staggered entrance for the mobile nav, driven by an inline --i index. */
+.stagger > * {
+  animation: pop-in 320ms var(--ease-entrance) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+/* ------------------------------------------------------- reduced motion --- */
+/* Everything collapses to opacity. No exceptions, including the hero. */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .marquee {
+    overflow-x: auto;
+  }
+
+  .hero-plate {
+    transform: none !important;
+  }
+
+  .live-dot {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------- view transitions ------- */
+
+::view-transition-old(dish-media),
+::view-transition-new(dish-media) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease-entrance);
+}
+
+/* -------------------------------------------------------- scrollbars ------ */
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
