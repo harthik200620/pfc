@@ -63,14 +63,24 @@ in the dish modal and the gallery lightbox.
 Downloaded originals are gitignored — run `npm run images` to recreate them. A dish with no
 image falls back to a drawn plate in the same palette, not a grey box.
 
-**The hero is the exception.** No CC-licensed photograph of the PFC storefront exists, so
-`public/images/hero-storefront.svg` is drawn in-repo from the building's description. To use
-a real photo, drop it in `public/images/` and change one line at the top of
-[`components/Hero.tsx`](components/Hero.tsx):
+**The hero is the exception.** No CC-licensed photograph of the PFC storefront exists, so it
+never goes through the fetcher. [`components/Hero.tsx`](components/Hero.tsx) resolves it once
+at module load and the swap is the filename, not a code change:
 
-```ts
-const HERO_PLATE = "/images/hero-storefront.svg";
 ```
+public/images/hero-storefront.jpg   a real photograph — used when present
+public/images/hero-storefront.svg   the drawn plate, from the building's description
+```
+
+Drop a JPEG at that exact path and it is picked up on the next server start; remove it and
+the drawn plate covers for it, rather than leaving a broken image across the first viewport.
+The photograph currently committed was supplied by the site's owner — it is not CC-licensed
+and is deliberately absent from `CREDITS.md` and the `/credits` table, which cover only the
+images the fetcher sourced.
+
+The same photograph doubles as the page-wide ambient wash behind every section
+([`components/PageAtmosphere.tsx`](components/PageAtmosphere.tsx)), blurred and darkened. That
+layer is a CSS `background-image`, so a missing file degrades to the gradients underneath.
 
 ## Fonts
 

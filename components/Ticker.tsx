@@ -9,12 +9,12 @@ export function Ticker() {
   const items = [...TICKER_ITEMS, ...TICKER_ITEMS];
 
   return (
-    <div className="marquee relative overflow-hidden border-y border-hairline bg-surface-1/50 py-3">
+    <div className="marquee seam relative overflow-hidden py-3">
       <div className="marquee-track flex w-max items-center gap-8 px-4">
         {items.map((item, i) => (
           <span key={`${item.hall}-${i}`} className="data flex shrink-0 items-center gap-2.5 whitespace-nowrap">
             <span className="text-brass">{item.hall}</span>
-            <span className="text-jade-mist/35" aria-hidden="true">
+            <span className="text-muted" aria-hidden="true">
               →
             </span>
             <span className="text-jade-mist/75">{item.dish}</span>

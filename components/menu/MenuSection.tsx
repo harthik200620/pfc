@@ -193,16 +193,20 @@ export function MenuSection() {
     }`;
 
   return (
-    <section id="menu" className="section" aria-labelledby="menu-heading">
+    <section id="menu" className="section lume-sink pool-tl" aria-labelledby="menu-heading">
       <div className="shell">
         <p className="eyebrow mb-4">The board</p>
-        <h2 id="menu-heading" className="h2 max-w-[18ch]">
+        <h2 id="menu-heading" className="h2 rule-under max-w-[18ch]">
           Twenty-six things, and everyone has an opinion about four of them.
         </h2>
 
         {/* Category rail — DERIVED from the data, so a category with no dishes
             cannot render. This is what stops an empty Beverages tab shipping. */}
-        <div className="no-scrollbar sticky top-16 z-30 -mx-4 mt-8 overflow-x-auto bg-ink/85 px-4 py-3 backdrop-blur-lg">
+        {/* A gradient rather than a second full-width backdrop-filter: this sits
+            directly under the nav's, live in the scroll path, and at 85% ink the
+            blur contributed almost nothing visually while costing a full-width
+            resample every frame on the mid-range Android this targets. */}
+        <div className="no-scrollbar sticky top-16 z-30 -mx-4 mt-8 overflow-x-auto bg-gradient-to-b from-ink via-ink/95 to-ink/70 px-4 py-3">
           <div className="flex w-max gap-2">
             <button
               type="button"
@@ -244,7 +248,7 @@ export function MenuSection() {
               height="16"
               viewBox="0 0 16 16"
               fill="none"
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-jade-mist/40"
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
               aria-hidden="true"
             >
               <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
@@ -306,7 +310,7 @@ export function MenuSection() {
             )}
           </div>
 
-          <p className="data text-jade-mist/45" aria-live="polite">
+          <p className="data text-muted" aria-live="polite">
             {results.length} {results.length === 1 ? "dish" : "dishes"}
           </p>
         </div>

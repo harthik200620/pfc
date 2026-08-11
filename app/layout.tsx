@@ -3,6 +3,7 @@ import { SITE, SERVICE_WINDOWS } from "@/data/site";
 import { CartProvider } from "@/components/providers/CartProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import { CartPanel } from "@/components/cart/CartPanel";
+import { PageAtmosphere } from "@/components/PageAtmosphere";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-IN">
       <body>
+        <PageAtmosphere />
         <script
           type="application/ld+json"
           // Static, authored above — not user input.

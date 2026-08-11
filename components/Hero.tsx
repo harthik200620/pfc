@@ -1,3 +1,6 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
+import Image from "next/image";
 import { OpenPill } from "@/components/OpenPill";
 
 /**
@@ -8,22 +11,33 @@ import { OpenPill } from "@/components/OpenPill";
  *   z-3  emerald light-leak from the top right
  *   z-10 content
  *
- * HERO_PLATE is the one-line swap. Drop a photograph into public/images/ and
- * point this at it; everything else is unchanged.
+ * The photograph wins when it is there, and the drawn plate covers for it when
+ * it is not — checked once at module load rather than hard-coded, so dropping
+ * hero-storefront.jpg into public/images/ is the entire operation and removing
+ * it again does not leave a broken image across the first viewport. This is a
+ * server component, so the check never reaches the browser.
  */
-const HERO_PLATE = "/images/hero-storefront.svg";
+const HERO_PHOTO = "/images/hero-storefront.jpg";
+const HERO_DRAWN = "/images/hero-storefront.svg";
+
+const HERO_PLATE = existsSync(path.join(process.cwd(), "public", "images", "hero-storefront.jpg"))
+  ? HERO_PHOTO
+  : HERO_DRAWN;
 
 export function Hero() {
   return (
     <section id="top" className="relative isolate min-h-[100svh] overflow-hidden">
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={HERO_PLATE}
           alt=""
           aria-hidden="true"
-          className="hero-plate absolute inset-0 h-full w-full scale-[1.12] object-cover"
-          fetchPriority="high"
+          fill
+          sizes="100vw"
+          quality={90}
+          /* Next 16 deprecated `priority` in favour of `preload`. */
+          preload
+          className="hero-plate scale-[1.12] object-cover"
         />
       </div>
 
@@ -71,7 +85,7 @@ export function Hero() {
 
       <a
         href="#menu"
-        className="absolute inset-x-0 bottom-6 mx-auto hidden w-fit flex-col items-center gap-2 text-jade-mist/50 transition-colors hover:text-emerald-lit sm:flex"
+        className="absolute inset-x-0 bottom-6 mx-auto hidden w-fit flex-col items-center gap-2 text-muted transition-colors hover:text-emerald-lit sm:flex"
       >
         <span className="data text-[0.625rem] uppercase tracking-[0.18em]">Scroll</span>
         <svg width="12" height="20" viewBox="0 0 12 20" fill="none" aria-hidden="true">

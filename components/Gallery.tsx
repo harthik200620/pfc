@@ -43,10 +43,10 @@ export function Gallery() {
   const activeImage = active ? IMAGES[active.id] : undefined;
 
   return (
-    <section className="section" aria-labelledby="gallery-heading">
+    <section className="section lume-abyss" aria-labelledby="gallery-heading">
       <div className="shell">
         <p className="eyebrow mb-4">Gallery</p>
-        <h2 id="gallery-heading" className="h2 max-w-[16ch]">
+        <h2 id="gallery-heading" className="h2 rule-under max-w-[16ch]">
           The arena, the counter, the plate.
         </h2>
 
@@ -99,7 +99,7 @@ export function Gallery() {
               <div>
                 <p className="text-sm text-jade-mist">{active.caption}</p>
                 {activeImage.attributionRequired && (
-                  <p className="mt-1 text-xs text-jade-mist/45">
+                  <p className="mt-1 text-xs text-muted">
                     Photo: {activeImage.creator} ·{" "}
                     <a
                       href={activeImage.licenseUrl}
@@ -131,7 +131,7 @@ export function Gallery() {
                 >
                   ‹
                 </button>
-                <span className="data text-jade-mist/45">
+                <span className="data text-muted">
                   {index! + 1}/{ITEMS.length}
                 </span>
                 <button

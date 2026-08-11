@@ -21,10 +21,10 @@ export function Visit() {
   useEffect(() => setToday(istClock().weekday), []);
 
   return (
-    <section id="visit" className="section" aria-labelledby="visit-heading">
+    <section id="visit" className="section lume-rise pool-tl pool-brass" aria-labelledby="visit-heading">
       <div className="shell">
         <p className="eyebrow mb-4">Visit</p>
-        <h2 id="visit-heading" className="h2 max-w-[18ch]">
+        <h2 id="visit-heading" className="h2 rule-under max-w-[18ch]">
           Oval 3, where the loop begins.
         </h2>
 
@@ -96,7 +96,7 @@ export function Visit() {
                   );
                 })}
               </ul>
-              <p className="mt-4 text-sm text-jade-mist/50">
+              <p className="mt-4 text-sm text-muted">
                 The four-to-six gap is the shift change, not a closure by accident.
               </p>
             </div>

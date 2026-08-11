@@ -163,7 +163,7 @@ export function CartPanel() {
                         <p className="data mt-1 text-brass">
                           {rupees(line.lineTotal)}
                           {split && (
-                            <span className="ml-2 text-jade-mist/45">
+                            <span className="ml-2 text-muted">
                               {rupees(perHead(line.lineTotal, heads))}/head
                             </span>
                           )}
@@ -178,7 +178,7 @@ export function CartPanel() {
                           />
                           <button
                             type="button"
-                            className="-my-3.5 py-3.5 text-xs text-jade-mist/45 underline underline-offset-4 hover:text-chilli-lit"
+                            className="-my-3.5 py-3.5 text-xs text-muted underline underline-offset-4 hover:text-chilli-lit"
                             onClick={() => cart.remove(line.dish.id)}
                           >
                             Remove
@@ -449,7 +449,7 @@ function CheckoutView({ onBack, onDone }: { onBack: () => void; onDone: (r: Orde
           {/* Display-only, and that is deliberate — no backend can take a
               payment. It is not a dead control: the choice is carried into the
               summary below and onto the success screen. */}
-          <p className="mt-2 text-xs text-jade-mist/45">
+          <p className="mt-2 text-xs text-muted">
             {form.payment === "cash"
               ? `Pay ${rupees(cart.total)} in cash when it arrives.`
               : `Pay ${rupees(cart.total)} by UPI at the door — they'll show a QR.`}
@@ -458,7 +458,7 @@ function CheckoutView({ onBack, onDone }: { onBack: () => void; onDone: (r: Orde
 
         <div>
           <label htmlFor="co-notes" className={label}>
-            Notes <span className="text-jade-mist/35">(optional)</span>
+            Notes <span className="text-muted">(optional)</span>
           </label>
           <textarea
             id="co-notes"
@@ -477,7 +477,7 @@ function CheckoutView({ onBack, onDone }: { onBack: () => void; onDone: (r: Orde
         )}
 
         <div className="rounded-lg border border-hairline p-3">
-          <p className="text-xs text-jade-mist/45">
+          <p className="text-xs text-muted">
             Mock API — nothing is sent anywhere. Failure is deterministic, not random: order with{" "}
             <span className="data">{TEST_FAILURE_PHONE}</span>, or arm it here.
           </p>
@@ -525,7 +525,7 @@ function SuccessView({ result, onClose }: { result: OrderResult; onClose: () => 
         Roughly <span className="data text-brass">{result.etaMinutes} minutes</span> to your hall.
         Quote the reference if you call.
       </p>
-      <p className="mt-4 text-sm text-jade-mist/50">
+      <p className="mt-4 text-sm text-muted">
         Nothing was actually sent — this is a student-built demo with no backend.
       </p>
       <button type="button" className="btn btn-primary mt-8" onClick={onClose}>

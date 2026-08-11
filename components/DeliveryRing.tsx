@@ -80,10 +80,10 @@ export function DeliveryRing() {
   const tabbableId = selectedId ?? ordered[0]?.id;
 
   return (
-    <section id="delivery" className="section" aria-labelledby="delivery-heading">
+    <section id="delivery" className="section lume-sink pool-c" aria-labelledby="delivery-heading">
       <div className="shell">
         <p className="eyebrow mb-4">Delivery</p>
-        <h2 id="delivery-heading" className="h2 max-w-[20ch]">
+        <h2 id="delivery-heading" className="h2 rule-under max-w-[20ch]">
           The loop is a circle. So is the picker.
         </h2>
         <p className="mt-5 max-w-[58ch] text-jade-mist/70">
@@ -273,7 +273,7 @@ export function DeliveryRing() {
               <>
                 <p className="eyebrow mb-3">Delivering to</p>
                 <p className="h3">{selected.name}</p>
-                <p className="data mt-1 text-jade-mist/45">
+                <p className="data mt-1 text-muted">
                   {selected.code} · {selected.tier === 1 ? "on the loop" : "off the loop"}
                 </p>
 
@@ -292,7 +292,7 @@ export function DeliveryRing() {
                   </div>
                 </dl>
 
-                <p className="mt-5 text-xs leading-relaxed text-jade-mist/40">
+                <p className="mt-5 text-xs leading-relaxed text-muted">
                   Fees are placeholders — the two public sources disagree (₹30 vs ~₹15). ETA is
                   derived from ring distance, not measured.
                 </p>

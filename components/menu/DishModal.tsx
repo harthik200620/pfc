@@ -112,7 +112,7 @@ export function DishModal({ dish, onClose }: Props) {
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <span className="data text-brass">{rupees(dish.price)}</span>
             <SpicePips level={dish.spice} />
-            <span className="data text-jade-mist/50">{dish.prepMinutes} min</span>
+            <span className="data text-muted">{dish.prepMinutes} min</span>
           </div>
 
           <p className="mt-4 text-jade-mist/80">{dish.description}</p>
@@ -153,7 +153,7 @@ export function DishModal({ dish, onClose }: Props) {
           </div>
 
           {credit?.attributionRequired && (
-            <p className="mt-5 border-t border-hairline pt-4 text-xs text-jade-mist/45">
+            <p className="mt-5 border-t border-hairline pt-4 text-xs text-muted">
               Photo: {credit.creator} ·{" "}
               <a href={credit.licenseUrl} className="underline hover:text-emerald-lit" target="_blank" rel="noreferrer">
                 {credit.license}

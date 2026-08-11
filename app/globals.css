@@ -78,6 +78,15 @@
   --color-surface-3: #154536;
   --color-hairline: #1c5641;
 
+  /* Below ink. The dark half of the tonal rhythm — sections that sink. */
+  --color-abyss: #020c09;
+
+  /* Solid muted text. The jade-mist/35–/50 alpha ladder it replaces was already
+     at or below AA on flat ink (/45 measured 4.04:1), and alpha text composites
+     against whatever is behind it, so ambient lighting only made that worse.
+     This is 8.2:1 on ink and 7.2:1 in the lightest lit patch. */
+  --color-muted: #9fb5ab;
+
   --font-display: "Gambarino", "Iowan Old Style", "Palatino Linotype", Palatino,
     Georgia, ui-serif, serif;
   --font-body: "Switzer", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
@@ -87,6 +96,16 @@
 
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Elevation. The shadow colour is a near-black emerald, never neutral black:
+     a grey shadow over #051c15 reads as dirt rather than depth. */
+  --shadow-e1: 0 1px 2px -1px rgb(1 10 7 / 0.55), 0 2px 5px -2px rgb(1 10 7 / 0.4);
+  --shadow-e2: 0 2px 4px -2px rgb(1 10 7 / 0.5), 0 10px 24px -8px rgb(1 10 7 / 0.55);
+  --shadow-e3: 0 4px 10px -4px rgb(1 10 7 / 0.55), 0 20px 48px -14px rgb(1 10 7 / 0.65);
+  --shadow-e4: 0 8px 18px -8px rgb(1 10 7 / 0.6), 0 40px 88px -24px rgb(1 10 7 / 0.72);
+  --shadow-lip: inset 0 1px 0 0 rgb(232 242 236 / 0.06);
+  --shadow-brass-halo: 0 0 0 1px rgb(200 162 74 / 0.22),
+    0 16px 40px -18px rgb(200 162 74 / 0.3);
 
   --text-display: clamp(2.75rem, 7vw, 6.5rem);
   --text-display--line-height: 0.95;
@@ -243,6 +262,7 @@
   .btn-primary {
     background: var(--color-emerald-lit);
     color: var(--color-ink);
+    box-shadow: var(--shadow-e1);
   }
 
   .btn-primary:hover:not(:disabled) {
@@ -263,16 +283,73 @@
   .btn-brass {
     background: var(--color-brass);
     color: var(--color-ink);
+    box-shadow: var(--shadow-e1);
   }
 
   .btn-brass:hover:not(:disabled) {
     background: #dbb75f;
+    box-shadow: var(--shadow-brass-halo);
   }
 
+  /* Gradient, not a flat fill: light falls from the top edge, so the card is
+     lighter where it catches it and sinks to ink at the foot. The 1px lip is an
+     ::after overlay rather than an inset shadow because six of the sixteen call
+     sites are overflow-hidden cards with an image flush to the top edge, and an
+     inset shadow paints under content — it would be invisible exactly there. */
   .card {
-    background: color-mix(in oklab, var(--color-surface-1) 88%, transparent);
+    position: relative;
+    background-color: color-mix(in oklab, var(--color-surface-1) 55%, transparent);
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-surface-2) 60%, transparent) 0%,
+      color-mix(in oklab, var(--color-surface-1) 72%, transparent) 42%,
+      color-mix(in oklab, var(--color-ink) 55%, transparent) 100%
+    );
     border: 1px solid var(--color-hairline);
     border-radius: 1rem;
+    box-shadow: var(--shadow-e2), var(--shadow-lip);
+    transition: box-shadow 260ms var(--ease-entrance),
+      border-color 260ms var(--ease-entrance), transform 260ms var(--ease-entrance);
+  }
+
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-jade-mist) 7%, transparent) 0 1px,
+      transparent 1px
+    );
+    box-shadow: inset 0 0 0 1px transparent;
+    transition: box-shadow 260ms var(--ease-entrance);
+  }
+
+  /* The modal panel also carries .card; warming its border because the pointer
+     happened to enter the dialog is noise, not feedback. */
+  @media (hover: hover) {
+    .card:not([role="dialog"]):hover {
+      border-color: color-mix(in oklab, var(--color-brass) 32%, var(--color-hairline));
+      box-shadow: var(--shadow-e3), var(--shadow-lip);
+    }
+
+    .card:not([role="dialog"]):hover::after {
+      box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-brass) 24%, transparent);
+    }
+  }
+
+  /* The lift is only for cards you can act on — article is DishCard and the
+     Spotlight cards, button is the Gallery tile. Forms and readouts get the
+     depth without the motion. */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    article.card:hover,
+    button.card:hover,
+    a.card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-e4), var(--shadow-lip);
+    }
   }
 
   .field {
@@ -299,8 +376,116 @@
     border-color: var(--color-chilli-lit);
   }
 
+  /* ------------------------------------------------------------------ lume --
+     Section-level ambient lighting: the light and dark patches that give the
+     page a tonal rhythm instead of one flat field of ink. Two composited slots,
+     both empty by default, both filled by modifier classes:
+       --lume-pool   a soft radial — the light source
+       --lume-tone   a vertical band — the section's base tone
+
+     Deliberately NOT `isolation: isolate`. DishModal (fixed, z-100) renders
+     inside <section id="menu"> and the Gallery lightbox (fixed, z-110) inside
+     the Gallery section. Isolating the section would scope those z-indices to
+     it, and the Nav (fixed z-50, a root-level sibling) would then paint over
+     both modals. With plain `relative` the pseudo-element escapes into the
+     root's negative layer while staying clipped to the section box, because
+     that box is still its containing block. */
   .section {
     padding-block: clamp(3.5rem, 9vw, 7.5rem);
+  }
+
+  .section,
+  .lume {
+    position: relative;
+  }
+
+  .section::before,
+  .lume::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--lume-pool, none), var(--lume-tone, none);
+  }
+
+  /* The pool. One gradient, six placements. Peak alpha is capped at 0.10
+     (0.075 for brass, which costs more luminance per unit alpha) — that ceiling
+     is the contrast budget, not a taste call. */
+  .pool-t,
+  .pool-tl,
+  .pool-tr,
+  .pool-bl,
+  .pool-br,
+  .pool-c {
+    --lume-pool: radial-gradient(
+      var(--lume-size, 58% 72%) at var(--lume-at),
+      rgb(var(--lume-hue, 23 166 115) / var(--lume-peak, 0.1)) 0%,
+      rgb(var(--lume-hue, 23 166 115) / 0.045) 34%,
+      rgb(var(--lume-hue, 23 166 115) / 0) 70%
+    );
+  }
+
+  .pool-t {
+    --lume-at: 50% -4%;
+  }
+
+  .pool-tl {
+    --lume-at: 14% 2%;
+  }
+
+  .pool-tr {
+    --lume-at: 86% 2%;
+  }
+
+  .pool-bl {
+    --lume-at: 12% 98%;
+  }
+
+  .pool-br {
+    --lume-at: 88% 98%;
+  }
+
+  .pool-c {
+    --lume-at: 50% 50%;
+    --lume-size: 46% 60%;
+  }
+
+  .pool-brass {
+    --lume-hue: 200 162 74;
+    --lume-peak: 0.075;
+  }
+
+  /* The tonal band. Zero at both ends on purpose — pools live in the top and
+     bottom 6%, so pool and band never sum at full strength. */
+  .lume-rise {
+    --lume-tone: linear-gradient(
+      180deg,
+      rgb(23 166 115 / 0) 0%,
+      rgb(23 166 115 / 0.042) 48%,
+      rgb(23 166 115 / 0) 100%
+    );
+  }
+
+  .lume-sink {
+    --lume-tone: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in oklab, var(--color-abyss) 55%, transparent) 34%,
+      color-mix(in oklab, var(--color-abyss) 55%, transparent) 66%,
+      transparent 100%
+    );
+  }
+
+  /* Deepest — for the gallery, where photographs want the blackest ground. */
+  .lume-abyss {
+    --lume-tone: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in oklab, var(--color-abyss) 78%, transparent) 30%,
+      color-mix(in oklab, var(--color-abyss) 78%, transparent) 72%,
+      transparent 100%
+    );
   }
 
   .shell {
@@ -312,6 +497,71 @@
 
   .hairline {
     border-top: 1px solid var(--color-hairline);
+  }
+
+  /* Brass hairline that fades in and hands off to emerald. A background rather
+     than a border, because a border cannot hold a gradient. */
+  .rule-brass-top {
+    background-image: linear-gradient(
+      90deg,
+      rgb(200 162 74 / 0) 0%,
+      rgb(200 162 74 / 0.5) 18%,
+      rgb(200 162 74 / 0.45) 40%,
+      rgb(28 86 65 / 0.85) 62%,
+      rgb(28 86 65 / 0) 100%
+    );
+    background-size: 100% 1px;
+    background-position: top;
+    background-repeat: no-repeat;
+  }
+
+  /* The heading motif: 3rem of solid brass, then a whisper trailing off across
+     the measure. One line, no ornament. */
+  .rule-under {
+    position: relative;
+    padding-bottom: 0.85rem;
+  }
+
+  .rule-under::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-end: 0;
+    block-size: 1px;
+    inline-size: min(100%, 22rem);
+    background: linear-gradient(
+      90deg,
+      rgb(200 162 74 / 0.9) 0,
+      rgb(200 162 74 / 0.9) 3rem,
+      rgb(200 162 74 / 0.18) 6rem,
+      rgb(200 162 74 / 0) 100%
+    );
+  }
+
+  /* The ticker's two edges: brass above, emerald below, shallow fill between. */
+  .seam {
+    background:
+      linear-gradient(
+          90deg,
+          rgb(200 162 74 / 0) 0%,
+          rgb(200 162 74 / 0.4) 22%,
+          rgb(200 162 74 / 0.4) 78%,
+          rgb(200 162 74 / 0) 100%
+        )
+        top / 100% 1px no-repeat,
+      linear-gradient(
+          90deg,
+          rgb(28 86 65 / 0) 0%,
+          rgb(28 86 65 / 0.9) 28%,
+          rgb(28 86 65 / 0.9) 72%,
+          rgb(28 86 65 / 0) 100%
+        )
+        bottom / 100% 1px no-repeat,
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--color-surface-1) 68%, transparent),
+        color-mix(in oklab, var(--color-ink) 40%, transparent)
+      );
   }
 
   .sr-only-focusable:not(:focus):not(:focus-within) {
@@ -338,6 +588,72 @@
   background-size: 180px 180px;
 }
 
+/* ----------------------------------------------------------- atmosphere -- */
+/* The page's ambient base: the storefront photograph, blurred to a wash and
+   darkened, sitting behind everything. Fixed, so it never scrolls and the blur
+   rasterises exactly once.
+
+   background-image, not <img>, on purpose: if the photograph is missing a
+   background-image silently paints nothing and the veil below is a complete
+   look on its own, where a missing <img> would render a broken-image box the
+   size of the viewport.
+
+   `contain` keeps the blur's invalidation and the grain's blend inside this
+   subtree — without it, mix-blend-mode: overlay pulls the whole document into
+   a blend group. */
+
+.atmos {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  isolation: isolate;
+  contain: layout paint style;
+  background-color: var(--color-ink);
+}
+
+.atmos-plate {
+  position: absolute;
+  /* Overscan hides the blur's transparent edges. */
+  inset: -8%;
+  background-image: url("/images/hero-storefront.jpg");
+  background-size: cover;
+  background-position: 50% 38%;
+  background-repeat: no-repeat;
+  /* brightness(0.5) is the contrast budget, not a taste call. */
+  filter: blur(46px) saturate(0.5) brightness(0.5);
+}
+
+.atmos-veil {
+  position: absolute;
+  inset: 0;
+  /* The flat ink is last, so it paints first and the two ambient poles
+     composite on top of it. Reversed, the veil would wash them out. */
+  background:
+    radial-gradient(
+      118% 74% at 50% -10%,
+      rgb(23 166 115 / 0.055) 0%,
+      rgb(23 166 115 / 0) 58%
+    ),
+    radial-gradient(
+      86% 58% at 88% 106%,
+      rgb(200 162 74 / 0.05) 0%,
+      rgb(200 162 74 / 0) 60%
+    ),
+    linear-gradient(0deg, rgb(5 28 21 / 0.94), rgb(5 28 21 / 0.94));
+}
+
+.atmos-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 90% at 50% 45%,
+    color-mix(in oklab, var(--color-abyss) 0%, transparent) 42%,
+    color-mix(in oklab, var(--color-abyss) 55%, transparent) 100%
+  );
+}
+
 /* --------------------------------------------------------------- motion --- */
 /* Native scroll-driven animations only. No JS scroll listeners, no library:
    these run on the compositor, which is what keeps them at 60fps on the
@@ -348,10 +664,25 @@
    range there runs over the wrong window — which reads as broken, where an
    absent animation reads as fine. */
 
+/* Lands at 32%, not 100%. With the default view() range the animation runs
+   across the element's ENTIRE traversal — enter at the bottom through exit at
+   the top — so a card sitting mid-screen was only ~50% opaque and composited
+   toward the ink behind it. An element of height h in a viewport of height v is
+   fully on screen at h / (v + h) of that range, ~32% for these cards, so 32% is
+   the moment it has finished arriving. Everything on screen is now opaque.
+
+   Done with keyframe percentages rather than animation-range for the Firefox
+   reason above; this behaves identically in every engine. It also fixes the
+   last row on the page, which could never reach 100% because the document runs
+   out of scroll before the range completes. */
 @keyframes reveal-in {
   from {
     opacity: 0;
     transform: translateY(1.25rem);
+  }
+  32% {
+    opacity: 1;
+    transform: none;
   }
   to {
     opacity: 1;
@@ -539,6 +870,13 @@
   .live-dot {
     animation: none !important;
     opacity: 1 !important;
+  }
+
+  /* The blanket transition-duration override above kills the easing but not the
+     transform itself, so the hover lift would still snap into place. */
+  .card,
+  .card:hover {
+    transform: none !important;
   }
 
   ::view-transition-group(*),

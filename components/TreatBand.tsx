@@ -12,7 +12,7 @@ export function TreatBand() {
   const { openCart } = useCart();
 
   return (
-    <section className="section" aria-labelledby="treat-heading">
+    <section className="section lume-rise pool-tr pool-brass" aria-labelledby="treat-heading">
       <div className="shell">
         <div className="reveal card relative overflow-hidden p-8 sm:p-12">
           <div
@@ -24,7 +24,7 @@ export function TreatBand() {
           />
           <div className="relative max-w-[62ch]">
             <p className="eyebrow mb-4">The treat</p>
-            <h2 id="treat-heading" className="h2">
+            <h2 id="treat-heading" className="h2 rule-under">
               Nobody comes here alone after good news.
             </h2>
             <p className="mt-5 text-jade-mist/85">

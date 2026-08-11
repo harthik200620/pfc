@@ -128,12 +128,12 @@ export function Reserve() {
   const slotLabel = SLOTS.find((s) => s.value === saved?.time)?.label ?? saved?.time;
 
   return (
-    <section id="reserve" className="section" aria-labelledby="reserve-heading">
+    <section id="reserve" className="section lume-rise pool-bl" aria-labelledby="reserve-heading">
       <div className="shell">
         <div className="grid gap-10 lg:grid-cols-[24rem_minmax(0,1fr)]">
           <div>
             <p className="eyebrow mb-4">Reserve</p>
-            <h2 id="reserve-heading" className="h2">
+            <h2 id="reserve-heading" className="h2 rule-under">
               Hold a table in the arena.
             </h2>
             <p className="mt-5 text-jade-mist/70">
@@ -141,7 +141,7 @@ export function Reserve() {
               windows only — the picker won&apos;t offer you five o&apos;clock, because there
               is no five o&apos;clock.
             </p>
-            <ul className="data mt-6 space-y-1 text-jade-mist/50">
+            <ul className="data mt-6 space-y-1 text-muted">
               {WINDOW_LABELS.map((label) => (
                 <li key={label}>{label}</li>
               ))}
@@ -256,7 +256,7 @@ export function Reserve() {
 
                 <div className="sm:col-span-2">
                   <label htmlFor="reserve-note" className="eyebrow mb-2 block">
-                    Anything else <span className="text-jade-mist/35">(optional)</span>
+                    Anything else <span className="text-muted">(optional)</span>
                   </label>
                   <textarea
                     id="reserve-note"
@@ -279,7 +279,7 @@ export function Reserve() {
                 {pending ? "Holding the table…" : "Confirm reservation"}
               </button>
 
-              <p className="mt-4 text-xs text-jade-mist/35">
+              <p className="mt-4 text-xs text-muted">
                 No backend — this resolves against a mock. To see the failure path, book with{" "}
                 <span className="data">{TEST_FAILURE_PHONE}</span>.
               </p>

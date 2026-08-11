@@ -75,7 +75,9 @@ export function Nav() {
 
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-320 ${
-          stuck ? "border-b border-hairline bg-ink/80 backdrop-blur-xl" : "border-b border-transparent"
+          stuck
+            ? "rule-brass-top border-b border-hairline bg-ink/80 shadow-e2 backdrop-blur-md"
+            : "border-b border-transparent"
         }`}
       >
         <nav className="shell flex h-16 items-center justify-between gap-4" aria-label="Primary">

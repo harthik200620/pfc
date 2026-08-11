@@ -31,8 +31,9 @@ export default function CreditsPage() {
         <p className="mt-4 text-jade-mist/75">
           Nothing here is taken from Zomato, magicpin, Google Maps or Restaurant Guru. Those
           photographs belong to the people who took them or to the platform. The storefront on the
-          hero is drawn rather than photographed, for the same reason: no freely licensed picture
-          of the building exists.
+          hero is not in the table below either: no freely licensed picture of the building exists,
+          so it is a photograph supplied directly by the site&apos;s owner rather than one sourced
+          from a Creative Commons library.
         </p>
 
         <div className="card mt-10 overflow-x-auto">

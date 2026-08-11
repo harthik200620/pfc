@@ -55,12 +55,12 @@ export function Reviews() {
   }
 
   return (
-    <section className="section" aria-labelledby="reviews-heading">
+    <section className="section lume-sink pool-tr" aria-labelledby="reviews-heading">
       <div className="shell">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="eyebrow mb-4">What people say</p>
-            <h2 id="reviews-heading" className="h2 max-w-[16ch]">
+            <h2 id="reviews-heading" className="h2 rule-under max-w-[16ch]">
               Three-point-eight, across two thousand opinions.
             </h2>
           </div>
@@ -68,7 +68,7 @@ export function Reviews() {
             <span className="data text-3xl text-brass">{SITE.rating.value.toFixed(1)}</span>
             <div>
               <Stars value={SITE.rating.value} />
-              <p className="data mt-1 text-xs text-jade-mist/45">
+              <p className="data mt-1 text-xs text-muted">
                 {SITE.rating.count.toLocaleString("en-IN")} public reviews · {SITE.rating.source}
               </p>
             </div>
@@ -82,7 +82,7 @@ export function Reviews() {
               <p className="mt-3 flex-1 text-sm leading-relaxed text-jade-mist/75">
                 &ldquo;{review.body}&rdquo;
               </p>
-              <footer className="data mt-4 text-xs text-jade-mist/45">
+              <footer className="data mt-4 text-xs text-muted">
                 {review.name} · {review.hall}
               </footer>
             </blockquote>
@@ -125,7 +125,7 @@ export function Reviews() {
                         className={`data h-11 w-11 rounded-full border transition-colors ${
                           value <= rating
                             ? "border-brass bg-brass/15 text-brass"
-                            : "border-hairline text-jade-mist/40 hover:border-brass/50"
+                            : "border-hairline text-muted hover:border-brass/50"
                         }`}
                       >
                         {value}
@@ -136,7 +136,7 @@ export function Reviews() {
 
                 <div className="min-w-[12rem] flex-1">
                   <label htmlFor="review-name" className="eyebrow mb-2 block">
-                    Name <span className="text-jade-mist/35">(optional)</span>
+                    Name <span className="text-muted">(optional)</span>
                   </label>
                   <input
                     id="review-name"

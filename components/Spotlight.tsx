@@ -18,10 +18,10 @@ export function Spotlight() {
   );
 
   return (
-    <section className="section" aria-labelledby="spotlight-heading">
+    <section className="section lume-rise pool-br" aria-labelledby="spotlight-heading">
       <div className="shell">
         <p className="eyebrow mb-4">Reputation</p>
-        <h2 id="spotlight-heading" className="h2 max-w-[16ch]">
+        <h2 id="spotlight-heading" className="h2 rule-under max-w-[16ch]">
           Three you will be told to order.
         </h2>
       </div>
@@ -48,7 +48,7 @@ export function Spotlight() {
               <p className="mt-3 text-jade-mist/75">{NOTES[dish.id] ?? dish.description}</p>
               <div className="mt-4 flex items-center gap-3">
                 <SpicePips level={dish.spice} />
-                <span className="data text-jade-mist/45">{dish.prepMinutes} min</span>
+                <span className="data text-muted">{dish.prepMinutes} min</span>
               </div>
             </div>
           </article>

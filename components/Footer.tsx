@@ -36,7 +36,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="hairline mt-10">
+    <footer className="lume lume-sink rule-brass-top mt-10">
       <div className="shell py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -119,7 +119,7 @@ export function Footer() {
         </div>
 
         <div className="hairline mt-12 pt-6">
-          <p className="max-w-[70ch] text-xs leading-relaxed text-jade-mist/45">
+          <p className="max-w-[70ch] text-xs leading-relaxed text-muted">
             Student-built and not officially affiliated with PFC or with IIT Kharagpur. Prices,
             delivery fees and ETAs on this site are placeholders and are not quoted by the
             restaurant. Nothing here places a real order. Photographs are used under CC0 or
