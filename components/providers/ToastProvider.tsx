@@ -50,10 +50,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`anim-pop pointer-events-auto max-w-sm rounded-full border px-4 py-2.5 text-sm font-medium shadow-lg backdrop-blur ${
+            className={`anim-pop pointer-events-auto max-w-sm rounded border px-4 py-2.5 text-sm font-semibold shadow-xl ${
               t.tone === "error"
-                ? "border-chilli-lit/50 bg-ink/95 text-chilli-lit"
-                : "border-emerald-lit/40 bg-ink/95 text-jade-mist"
+                ? "border-oxide/50 bg-espresso-2 text-oxide"
+                : "border-champagne/40 bg-espresso-2 text-linen"
             }`}
           >
             {t.message}

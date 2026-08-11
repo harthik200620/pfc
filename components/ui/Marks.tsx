@@ -4,13 +4,13 @@ import type { SpiceLevel } from "@/lib/types";
  * The Indian veg / non-veg mark. This is a legal marking under the Food Safety
  * and Standards (Packaging and Labelling) Regulations — a green square with a
  * green filled circle for vegetarian, brown/red with a filled circle for
- * non-vegetarian. It is not a style choice and is not recoloured to taste.
- *
- * --chilli is used here rather than --chilli-lit because this is a graphical
- * object, held to 3:1 (it measures 3.3:1), not text at 4.5:1.
+ * non-vegetarian. It is not a style choice and is not recoloured to match the
+ * palette; the green survives the redesign on purpose.
  */
 export function VegMark({ veg }: { veg: boolean }) {
-  const colour = veg ? "#17a673" : "#c2361f";
+  // Brighter variants of the legal green/red so the mark stays legible on
+  // dark surfaces; the square-and-dot semantics are unchanged.
+  const colour = veg ? "#2fa05f" : "#d4472e";
   const label = veg ? "Vegetarian" : "Non-vegetarian";
   return (
     <span className="inline-flex shrink-0" title={label}>
@@ -31,8 +31,8 @@ export function SpicePips({ level }: { level: SpiceLevel }) {
         <svg key={pip} width="9" height="12" viewBox="0 0 9 12" aria-hidden="true">
           <path
             d="M4.5 11.5C2.3 11.5.8 9.6.8 7.3.8 5 2.6 3.2 4.5.9c1.9 2.3 3.7 4.1 3.7 6.4 0 2.3-1.5 4.2-3.7 4.2Z"
-            fill={pip <= level ? "#c2361f" : "none"}
-            stroke={pip <= level ? "#c2361f" : "#1c5641"}
+            fill={pip <= level ? "#d4472e" : "none"}
+            stroke={pip <= level ? "#d4472e" : "rgba(246,241,231,0.3)"}
             strokeWidth="1"
           />
         </svg>
@@ -45,7 +45,7 @@ export function SpicePips({ level }: { level: SpiceLevel }) {
 export function UnverifiedMark() {
   return (
     <span
-      className="data rounded-full border border-brass/40 px-1.5 py-0.5 text-[0.625rem] leading-none text-brass"
+      className="data rounded border border-line px-1.5 py-0.5 text-[0.625rem] leading-none text-linen-2"
       title="Not on the attested menu list — added to populate this category. Verify at the counter."
     >
       ?

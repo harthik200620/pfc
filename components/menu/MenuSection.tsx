@@ -20,7 +20,10 @@ interface Filters {
 const DEFAULTS: Filters = { q: "", cat: "all", veg: false, spice: null, band: null, quick: false };
 
 type VTDocument = Document & {
-  startViewTransition?: (cb: () => void) => { finished: Promise<void> };
+  startViewTransition?: (cb: () => void) => {
+    finished: Promise<void>;
+    ready: Promise<void>;
+  };
 };
 
 /**
@@ -46,6 +49,10 @@ function withTransition(update: () => void, after?: () => void) {
 
   try {
     const transition = doc.startViewTransition(() => flushSync(apply));
+    // `ready` rejects whenever the transition is skipped (hidden document,
+    // concurrent transition) — unhandled, that logs a console error even
+    // though the state change itself succeeded.
+    transition.ready.catch(() => {});
     transition.finished.then(() => after?.(), () => after?.());
   } catch {
     apply();
@@ -186,27 +193,31 @@ export function MenuSection() {
   // min-h-11 is 44px — the touch-target floor, enforced here rather than
   // remembered at each of the fifteen call sites.
   const chip = (active: boolean) =>
-    `data inline-flex min-h-11 items-center rounded-full border px-3.5 text-[0.8125rem] transition-colors ${
+    `data inline-flex min-h-11 items-center rounded-[2px] border px-4 text-[0.75rem] uppercase tracking-[0.1em] transition-colors ${
       active
-        ? "border-emerald-lit bg-emerald-lit text-ink"
-        : "border-hairline text-jade-mist/70 hover:border-emerald-lit/60 hover:text-jade-mist"
+        ? "border-champagne bg-champagne text-espresso"
+        : "border-line bg-transparent text-linen-2 hover:border-champagne/60 hover:text-linen"
     }`;
 
   return (
     <section id="menu" className="section" aria-labelledby="menu-heading">
       <div className="shell">
-        <p className="eyebrow mb-4">The board</p>
-        <h2 id="menu-heading" className="h2 max-w-[18ch]">
-          Twenty-six things, and everyone has an opinion about four of them.
-        </h2>
+        <div className="text-center">
+          <p className="eyebrow mb-5">The menu</p>
+          <h2 id="menu-heading" className="h2 mx-auto max-w-[22ch]">
+            Twenty-six dishes. Four reputations.
+          </h2>
+          <div className="metal-rule mx-auto mt-6" aria-hidden="true" />
+        </div>
 
         {/* Category rail — DERIVED from the data, so a category with no dishes
             cannot render. This is what stops an empty Beverages tab shipping. */}
-        <div className="no-scrollbar sticky top-16 z-30 -mx-4 mt-8 overflow-x-auto bg-ink/85 px-4 py-3 backdrop-blur-lg">
-          <div className="flex w-max gap-2">
+        {/* The category rail — editorial tabs on a hairline, not filled chips. */}
+        <div className="no-scrollbar sticky top-16 z-30 -mx-4 mt-9 overflow-x-auto border-b border-line bg-espresso/90 px-4 backdrop-blur-lg">
+          <div className="flex w-max gap-6">
             <button
               type="button"
-              className={chip(filters.cat === "all")}
+              className="tab"
               onClick={() => setFilters((f) => ({ ...f, cat: "all" }))}
               aria-pressed={filters.cat === "all"}
             >
@@ -216,7 +227,7 @@ export function MenuSection() {
               <button
                 key={c.id}
                 type="button"
-                className={chip(filters.cat === c.id)}
+                className="tab"
                 onClick={() => setFilters((f) => ({ ...f, cat: c.id }))}
                 aria-pressed={filters.cat === c.id}
               >
@@ -244,7 +255,7 @@ export function MenuSection() {
               height="16"
               viewBox="0 0 16 16"
               fill="none"
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-jade-mist/40"
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-linen-2"
               aria-hidden="true"
             >
               <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
@@ -298,7 +309,7 @@ export function MenuSection() {
             {activeCount > 0 && (
               <button
                 type="button"
-                className="data px-2 py-2 text-[0.8125rem] text-brass underline underline-offset-4 hover:text-emerald-lit"
+                className="data min-h-11 px-2 text-[0.8125rem] text-champagne underline underline-offset-4 hover:text-linen"
                 onClick={() => setFilters(DEFAULTS)}
               >
                 Clear {activeCount}
@@ -306,7 +317,7 @@ export function MenuSection() {
             )}
           </div>
 
-          <p className="data text-jade-mist/45" aria-live="polite">
+          <p className="data text-sm text-linen-2" aria-live="polite">
             {results.length} {results.length === 1 ? "dish" : "dishes"}
           </p>
         </div>
@@ -324,13 +335,13 @@ export function MenuSection() {
           </div>
         ) : (
           <div className="card mt-6 p-10 text-center">
-            <p className="h3">Nothing matches all of that at once.</p>
-            <p className="mx-auto mt-3 max-w-[46ch] text-jade-mist/65">
+            <p className="h3">Nothing matches every filter at once.</p>
+            <p className="mx-auto mt-3 max-w-[46ch] text-linen-2">
               {filters.veg && filters.spice === 3
-                ? "There's no vegetarian dish at the top spice level — drop the heat to medium and Honey Chilli Potato comes back."
+                ? "No vegetarian dish reaches the top spice level — set the heat to medium and Honey Chilli Potato returns."
                 : filters.quick
-                  ? "Under 15 minutes rules out everything from the tandoor. Try clearing that one first."
-                  : "Clear the price band, or search for the dish by name instead."}
+                  ? "Under 15 minutes excludes everything from the tandoor. Clear that filter first."
+                  : "Clear the price band, or search for the dish by name."}
             </p>
             <button type="button" className="btn btn-ghost mt-6 px-6" onClick={() => setFilters(DEFAULTS)}>
               Clear all filters

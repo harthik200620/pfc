@@ -3,49 +3,42 @@
 import { useCart } from "@/components/providers/CartProvider";
 
 /**
- * Second of the ritual's three placements — headline, here, then Treat Mode in
- * the cart. It sits ABOVE the menu deliberately: the person who came to browse
- * dishes should meet the idea before they meet the prices, not at checkout
- * after they have already committed.
+ * The ritual, told straight. Second of its three placements — the hero
+ * carries it, this names it, Treat Mode in the cart completes it. It sits
+ * above the menu so the idea lands before the prices do.
  */
 export function TreatBand() {
   const { openCart } = useCart();
 
   return (
-    <section className="section" aria-labelledby="treat-heading">
-      <div className="shell">
-        <div className="reveal card relative overflow-hidden p-8 sm:p-12">
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(60% 90% at 88% 12%, rgba(200,162,74,0.12) 0%, rgba(200,162,74,0) 65%)",
-            }}
-          />
-          <div className="relative max-w-[62ch]">
-            <p className="eyebrow mb-4">The treat</p>
-            <h2 id="treat-heading" className="h2">
-              Nobody comes here alone after good news.
-            </h2>
-            <p className="mt-5 text-jade-mist/85">
-              An offer lands, a paper gets accepted, someone clears a viva — and within the
-              hour four juniors have walked them to Oval 3 and ordered without looking at the
-              board. The bill is the point. Splitting it is the ceremony.
-            </p>
-            <p className="mt-3 text-jade-mist/85">
-              So the cart does that arithmetic for you. Turn on Treat Mode, say how many
-              heads, and every line splits in front of you — then copy the whole breakdown
-              into the hall group before anyone starts arguing.
-            </p>
+    <section className="relative overflow-hidden border-b border-line bg-espresso-2" aria-labelledby="treat-heading">
+      <div aria-hidden="true" className="glow -left-40 -top-40" />
+      <div className="shell section relative">
+        <div className="max-w-[64ch]">
+          <p className="eyebrow mb-5">The ritual</p>
+          <h2 id="treat-heading" className="h2">
+            Good news is settled at this table.
+          </h2>
+          <div className="metal-rule mt-6" aria-hidden="true" />
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <button type="button" className="btn btn-brass px-6" onClick={() => openCart({ treat: true })}>
-                Start a treat
-              </button>
-              <a href="#menu" className="btn btn-ghost px-6">
-                Just browsing
-              </a>
-            </div>
+          <p className="serif-italic mt-7 text-xl leading-relaxed text-linen/90 sm:text-2xl">
+            An offer letter, an accepted paper, a cleared viva — at Kharagpur, the news is
+            only official once the table at Oval 3 has been paid for.
+          </p>
+
+          <p className="mt-6 text-linen-2">
+            The cart understands the custom. Turn on Treat Mode, set the number of guests,
+            and every line divides itself — then copy the full breakdown to the hall group
+            before the debate begins.
+          </p>
+
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <button type="button" className="btn btn-primary" onClick={() => openCart({ treat: true })}>
+              Begin a treat
+            </button>
+            <a href="#menu" className="btn btn-ghost">
+              Browse the menu
+            </a>
           </div>
         </div>
       </div>

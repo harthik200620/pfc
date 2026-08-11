@@ -128,20 +128,22 @@ export function Reserve() {
   const slotLabel = SLOTS.find((s) => s.value === saved?.time)?.label ?? saved?.time;
 
   return (
-    <section id="reserve" className="section" aria-labelledby="reserve-heading">
-      <div className="shell">
+    <section id="reserve" className="section relative overflow-hidden" aria-labelledby="reserve-heading">
+      <div aria-hidden="true" className="glow -right-44 -top-44" />
+      <div className="shell relative">
         <div className="grid gap-10 lg:grid-cols-[24rem_minmax(0,1fr)]">
           <div>
-            <p className="eyebrow mb-4">Reserve</p>
+            <p className="eyebrow mb-5">Reservations</p>
             <h2 id="reserve-heading" className="h2">
               Hold a table in the arena.
             </h2>
-            <p className="mt-5 text-jade-mist/70">
-              Seating is open-air and shaded, and it fills fast between 8 and 9. Two service
-              windows only — the picker won&apos;t offer you five o&apos;clock, because there
-              is no five o&apos;clock.
+            <div className="metal-rule mt-6" aria-hidden="true" />
+            <p className="mt-7 text-linen-2">
+              Seating is open-air and shaded, and it fills quickly between eight and nine.
+              Two service windows only — the picker will not offer five o&apos;clock,
+              because there is no five o&apos;clock.
             </p>
-            <ul className="data mt-6 space-y-1 text-jade-mist/50">
+            <ul className="data mt-6 space-y-1.5 text-sm text-champagne">
               {WINDOW_LABELS.map((label) => (
                 <li key={label}>{label}</li>
               ))}
@@ -150,13 +152,15 @@ export function Reserve() {
 
           {saved ? (
             <div className="card anim-pop p-8">
-              <p className="eyebrow mb-3 text-emerald-lit">Table held</p>
-              <p className="h2 font-mono text-emerald-lit">{saved.bookingRef}</p>
-              <p className="mt-4 text-jade-mist/80">
-                {saved.name}, {saved.party} {saved.party === 1 ? "person" : "people"}, {saved.date} at{" "}
-                {slotLabel}.
-              </p>
-              <p className="mt-3 text-sm text-jade-mist/55">
+              <p className="eyebrow mb-4">Table held</p>
+              <p className="brand text-3xl text-champagne sm:text-4xl">{saved.bookingRef}</p>
+              <div className="ticket-rule mt-5 pt-5">
+                <p className="text-linen-2">
+                  {saved.name}, {saved.party} {saved.party === 1 ? "person" : "people"}, {saved.date} at{" "}
+                  {slotLabel}.
+                </p>
+              </div>
+              <p className="mt-3 text-sm text-linen-2">
                 Show the reference at the counter. Nothing was actually sent anywhere — this is a
                 student-built demo with no backend.
               </p>
@@ -256,7 +260,7 @@ export function Reserve() {
 
                 <div className="sm:col-span-2">
                   <label htmlFor="reserve-note" className="eyebrow mb-2 block">
-                    Anything else <span className="text-jade-mist/35">(optional)</span>
+                    Anything else <span className="normal-case tracking-normal">(optional)</span>
                   </label>
                   <textarea
                     id="reserve-note"
@@ -270,7 +274,7 @@ export function Reserve() {
               </div>
 
               {failure && (
-                <p className="mt-5 rounded-lg border border-chilli-lit/40 bg-chilli/10 p-3 text-sm text-chilli-lit" role="alert">
+                <p className="mt-5 rounded border border-oxide/40 bg-oxide/10 p-3 text-sm text-oxide" role="alert">
                   {failure}
                 </p>
               )}
@@ -279,7 +283,7 @@ export function Reserve() {
                 {pending ? "Holding the table…" : "Confirm reservation"}
               </button>
 
-              <p className="mt-4 text-xs text-jade-mist/35">
+              <p className="mt-4 text-xs text-linen-2">
                 No backend — this resolves against a mock. To see the failure path, book with{" "}
                 <span className="data">{TEST_FAILURE_PHONE}</span>.
               </p>
@@ -311,7 +315,7 @@ function FieldWrap({
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-sm text-chilli-lit">
+        <p id={`${id}-error`} className="mt-1.5 text-sm text-oxide">
           {error}
         </p>
       )}

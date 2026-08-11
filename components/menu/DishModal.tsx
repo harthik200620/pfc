@@ -63,7 +63,7 @@ export function DishModal({ dish, onClose }: Props) {
     <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center">
       <button
         type="button"
-        className="anim-fade absolute inset-0 bg-ink/85 backdrop-blur-md"
+        className="anim-fade absolute inset-0 bg-espresso/70"
         onClick={onClose}
         aria-label="Close"
         tabIndex={-1}
@@ -76,7 +76,7 @@ export function DishModal({ dish, onClose }: Props) {
         aria-labelledby="dish-modal-title"
         className="anim-sheet card relative max-h-[92svh] w-full overflow-y-auto rounded-b-none sm:anim-pop sm:max-w-lg sm:rounded-2xl"
       >
-        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-t-2xl">
+        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-t-xl border-b border-line">
           <DishMedia
             id={dish.id}
             alt={dish.name}
@@ -87,7 +87,7 @@ export function DishModal({ dish, onClose }: Props) {
             ref={closeButton}
             type="button"
             onClick={onClose}
-            className="absolute right-3 top-3 grid h-11 w-11 place-items-center rounded-full bg-ink/80 text-jade-mist backdrop-blur transition-colors hover:text-emerald-lit"
+            className="absolute right-3 top-3 grid h-11 w-11 place-items-center rounded-full border border-line bg-espresso/80 text-linen backdrop-blur-sm transition-colors hover:text-champagne"
           >
             <span className="sr-only">Close</span>
             <svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true">
@@ -110,30 +110,30 @@ export function DishModal({ dish, onClose }: Props) {
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-3">
-            <span className="data text-brass">{rupees(dish.price)}</span>
+            <span className="price text-2xl text-champagne">{rupees(dish.price)}</span>
             <SpicePips level={dish.spice} />
-            <span className="data text-jade-mist/50">{dish.prepMinutes} min</span>
+            <span className="data text-linen-2">{dish.prepMinutes} min</span>
           </div>
 
-          <p className="mt-4 text-jade-mist/80">{dish.description}</p>
+          <p className="mt-4 text-linen-2">{dish.description}</p>
 
-          <dl className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3 border-t border-hairline pt-5 sm:grid-cols-2">
+          <dl className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3 border-t border-line pt-5 sm:grid-cols-2">
             <div>
               <dt className="eyebrow mb-1">Portion</dt>
-              <dd className="text-sm text-jade-mist/75">{dish.portion}</dd>
+              <dd className="text-sm text-linen-2">{dish.portion}</dd>
             </div>
             <div>
               <dt className="eyebrow mb-1">Allergens</dt>
-              <dd className="text-sm text-jade-mist/75">
+              <dd className="text-sm text-linen-2">
                 {dish.allergens.length > 0 ? dish.allergens.join(", ") : "None declared"}
               </dd>
             </div>
           </dl>
 
           {dish.unverified && (
-            <p className="mt-4 rounded-lg border border-brass/30 bg-brass/5 p-3 text-sm text-brass">
-              Not on the attested menu list — added so this category isn&apos;t empty. Check at the
-              counter before you count on it.
+            <p className="mt-4 rounded border border-line bg-espresso-3 p-3 text-sm text-linen-2">
+              Not on the attested menu list — added so this category isn&apos;t empty. Confirm at
+              the counter before you count on it.
             </p>
           )}
 
@@ -153,13 +153,13 @@ export function DishModal({ dish, onClose }: Props) {
           </div>
 
           {credit?.attributionRequired && (
-            <p className="mt-5 border-t border-hairline pt-4 text-xs text-jade-mist/45">
+            <p className="mt-5 border-t border-line pt-4 text-xs text-linen-2">
               Photo: {credit.creator} ·{" "}
-              <a href={credit.licenseUrl} className="underline hover:text-emerald-lit" target="_blank" rel="noreferrer">
+              <a href={credit.licenseUrl} className="underline hover:text-champagne" target="_blank" rel="noreferrer">
                 {credit.license}
               </a>{" "}
               ·{" "}
-              <a href={credit.sourceUrl} className="underline hover:text-emerald-lit" target="_blank" rel="noreferrer">
+              <a href={credit.sourceUrl} className="underline hover:text-champagne" target="_blank" rel="noreferrer">
                 source
               </a>
             </p>

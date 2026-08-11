@@ -13,8 +13,8 @@ function Stars({ value, className = "" }: { value: number; className?: string })
         <svg key={i} width="13" height="13" viewBox="0 0 14 14">
           <path
             d="M7 .8 8.9 5l4.5.4-3.4 3 1 4.4L7 10.5 3 12.8l1-4.4-3.4-3L5.1 5Z"
-            fill={i <= Math.round(value) ? "#c8a24a" : "none"}
-            stroke="#c8a24a"
+            fill={i <= Math.round(value) ? "#d3b778" : "none"}
+            stroke="#d3b778"
             strokeOpacity={i <= Math.round(value) ? 1 : 0.35}
             strokeWidth="1"
           />
@@ -55,34 +55,42 @@ export function Reviews() {
   }
 
   return (
-    <section className="section" aria-labelledby="reviews-heading">
-      <div className="shell">
-        <div className="flex flex-wrap items-end justify-between gap-6">
+    <section className="section relative overflow-hidden border-t border-line" aria-labelledby="reviews-heading">
+      <div aria-hidden="true" className="glow -bottom-40 -right-40" />
+      <div className="shell relative">
+        <div className="flex flex-wrap items-end justify-between gap-8">
           <div>
-            <p className="eyebrow mb-4">What people say</p>
-            <h2 id="reviews-heading" className="h2 max-w-[16ch]">
-              Three-point-eight, across two thousand opinions.
+            <p className="eyebrow mb-5">Word of mouth</p>
+            <h2 id="reviews-heading" className="h2 max-w-[20ch]">
+              Two thousand opinions, one verdict.
             </h2>
+            <div className="metal-rule mt-6" aria-hidden="true" />
           </div>
-          <div className="flex items-center gap-3">
-            <span className="data text-3xl text-brass">{SITE.rating.value.toFixed(1)}</span>
+          <div className="flex items-center gap-4">
+            <span className="brand text-5xl text-champagne">{SITE.rating.value.toFixed(1)}</span>
             <div>
               <Stars value={SITE.rating.value} />
-              <p className="data mt-1 text-xs text-jade-mist/45">
+              <p className="data mt-1.5 text-xs text-linen-2">
                 {SITE.rating.count.toLocaleString("en-IN")} public reviews · {SITE.rating.source}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-11 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {SEED_REVIEWS.map((review) => (
-            <blockquote key={review.id} className="reveal card flex flex-col p-5">
+            <blockquote key={review.id} className="reveal card relative flex flex-col overflow-hidden p-6">
+              <span
+                aria-hidden="true"
+                className="brand pointer-events-none absolute -top-5 right-2 text-[7rem] leading-none text-champagne/15"
+              >
+                &rdquo;
+              </span>
               <Stars value={review.rating} />
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-jade-mist/75">
+              <p className="serif-italic relative mt-4 flex-1 text-[1.0625rem] leading-relaxed text-linen/85">
                 &ldquo;{review.body}&rdquo;
               </p>
-              <footer className="data mt-4 text-xs text-jade-mist/45">
+              <footer className="mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-champagne">
                 {review.name} · {review.hall}
               </footer>
             </blockquote>
@@ -92,9 +100,10 @@ export function Reviews() {
         <div className="card mt-6 p-6 sm:p-8">
           {done ? (
             <div className="anim-pop">
-              <p className="h3 text-emerald-lit">Posted.</p>
-              <p className="mt-2 text-jade-mist/70">
-                It went to a mock endpoint, not to PFC — there is no backend here. Thanks anyway.
+              <p className="h3 text-champagne">Posted.</p>
+              <p className="mt-2 text-linen-2">
+                It went to a mock endpoint, not to PFC — there is no backend here. Thank you
+                all the same.
               </p>
               <button
                 type="button"
@@ -111,9 +120,9 @@ export function Reviews() {
             </div>
           ) : (
             <form onSubmit={onSubmit} noValidate>
-              <div className="flex flex-wrap items-center gap-5">
+              <div className="flex flex-wrap items-center gap-6">
                 <fieldset>
-                  <legend className="eyebrow mb-2">Your rating</legend>
+                  <legend className="eyebrow mb-3">Your rating</legend>
                   <div className="flex gap-1.5">
                     {[1, 2, 3, 4, 5].map((value) => (
                       <button
@@ -122,10 +131,10 @@ export function Reviews() {
                         onClick={() => setRating(value)}
                         aria-pressed={rating === value}
                         aria-label={`${value} star${value === 1 ? "" : "s"}`}
-                        className={`data h-11 w-11 rounded-full border transition-colors ${
+                        className={`data h-11 w-11 rounded border transition-colors ${
                           value <= rating
-                            ? "border-brass bg-brass/15 text-brass"
-                            : "border-hairline text-jade-mist/40 hover:border-brass/50"
+                            ? "border-champagne bg-champagne text-espresso"
+                            : "border-line text-linen-2 hover:border-champagne/60"
                         }`}
                       >
                         {value}
@@ -135,8 +144,8 @@ export function Reviews() {
                 </fieldset>
 
                 <div className="min-w-[12rem] flex-1">
-                  <label htmlFor="review-name" className="eyebrow mb-2 block">
-                    Name <span className="text-jade-mist/35">(optional)</span>
+                  <label htmlFor="review-name" className="eyebrow mb-3 block">
+                    Name <span className="normal-case tracking-normal">(optional)</span>
                   </label>
                   <input
                     id="review-name"
@@ -148,8 +157,8 @@ export function Reviews() {
                 </div>
               </div>
 
-              <div className="mt-5">
-                <label htmlFor="review-body" className="eyebrow mb-2 block">
+              <div className="mt-6">
+                <label htmlFor="review-body" className="eyebrow mb-3 block">
                   What happened
                 </label>
                 <textarea
@@ -164,12 +173,12 @@ export function Reviews() {
               </div>
 
               {failure && (
-                <p className="mt-4 rounded-lg border border-chilli-lit/40 bg-chilli/10 p-3 text-sm text-chilli-lit" role="alert">
+                <p className="mt-4 rounded border border-oxide/40 bg-oxide/10 p-3 text-sm text-oxide" role="alert">
                   {failure}
                 </p>
               )}
 
-              <button type="submit" className="btn btn-primary mt-5" disabled={pending}>
+              <button type="submit" className="btn btn-primary mt-6" disabled={pending}>
                 {pending ? "Posting…" : "Post review"}
               </button>
             </form>

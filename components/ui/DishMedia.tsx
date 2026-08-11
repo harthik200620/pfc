@@ -58,7 +58,7 @@ export function DishMedia({
 
   return (
     <div
-      className={`grid h-full w-full place-items-center bg-surface-2 ${className}`}
+      className={`grid h-full w-full place-items-center bg-espresso-3 ${className}`}
       style={style}
       role="img"
       aria-label={`${alt} — no photograph available`}
@@ -66,21 +66,21 @@ export function DishMedia({
       <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden="true">
         <defs>
           <radialGradient id={`p-${id}`} cx="42%" cy="38%">
-            <stop offset="0%" stopColor="#17a673" stopOpacity="0.55" />
-            <stop offset="60%" stopColor="#0e6e4e" stopOpacity="0.32" />
-            <stop offset="100%" stopColor="#051c15" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#2b2318" stopOpacity="0.9" />
+            <stop offset="60%" stopColor="#221b13" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#130f0a" stopOpacity="0.95" />
           </radialGradient>
         </defs>
         <rect width="100" height="100" fill={`url(#p-${id})`} />
         <g transform={`rotate(${rotate} 50 50)`} fill="none" strokeLinecap="round">
-          <circle cx="50" cy="50" r={ring2} stroke="#c8a24a" strokeOpacity="0.35" strokeWidth="0.6" />
-          <circle cx="50" cy="50" r={ring1} stroke="#c8a24a" strokeOpacity="0.55" strokeWidth="0.8" />
+          <circle cx="50" cy="50" r={ring2} stroke="#f6f1e7" strokeOpacity="0.1" strokeWidth="0.6" />
+          <circle cx="50" cy="50" r={ring1} stroke="#f6f1e7" strokeOpacity="0.16" strokeWidth="0.8" />
           <circle
             cx="50"
             cy="50"
             r={ring1 - 7}
-            stroke="#17a673"
-            strokeOpacity="0.7"
+            stroke="#d3b778"
+            strokeOpacity="0.6"
             strokeWidth="1.2"
             strokeDasharray={`${6 + (seed % 5)} ${4 + ((seed >> 2) % 6)}`}
           />

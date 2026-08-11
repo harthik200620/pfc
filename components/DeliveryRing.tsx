@@ -82,50 +82,60 @@ export function DeliveryRing() {
   return (
     <section id="delivery" className="section" aria-labelledby="delivery-heading">
       <div className="shell">
-        <p className="eyebrow mb-4">Delivery</p>
-        <h2 id="delivery-heading" className="h2 max-w-[20ch]">
-          The loop is a circle. So is the picker.
+        <p className="eyebrow mb-5">Delivery</p>
+        <h2 id="delivery-heading" className="h2 max-w-[22ch]">
+          The loop is a circle. So is the dial.
         </h2>
-        <p className="mt-5 max-w-[58ch] text-jade-mist/70">
-          Patel, Azad and Nehru sit on the PAN Loop itself. Everything else is a spur off it.
-          Pick your hall and the whole cart follows — fee, ETA and the address on checkout.
+        <div className="metal-rule mt-6" aria-hidden="true" />
+        <p className="mt-7 max-w-[58ch] text-linen-2">
+          Patel, Azad and Nehru sit on the PAN Loop itself; the rest reach it by a spur.
+          Select your hall and the whole order follows — fee, arrival time, and the address
+          at checkout.
         </p>
 
         <div className="mt-10 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
           {/* ------------------------------------------------------ the dial -- */}
+          {/* .ring-stand: the dial lies at 26° and stands upright as it
+              scrolls into view (CSS-only, guarded on animation-range support
+              — Firefox gets a flat ring rather than a wrong-windowed tilt).
+              The ground shadow fades as it stands. */}
           <div className="mx-auto w-full max-w-[520px]">
-            <svg
-              viewBox={`0 0 ${RING.size} ${RING.size}`}
-              className="h-auto w-full overflow-visible"
-              role="radiogroup"
-              aria-label="Delivery hall"
-            >
-              <defs>
-                <radialGradient id="ring-glow" cx="50%" cy="50%">
-                  <stop offset="55%" stopColor="#0e6e4e" stopOpacity="0" />
-                  <stop offset="100%" stopColor="#0e6e4e" stopOpacity="0.18" />
-                </radialGradient>
-              </defs>
-
-              <circle cx={RING.cx} cy={RING.cy} r={RING.radius + 40} fill="url(#ring-glow)" />
-
-              {/* the loop road */}
+            <div className="ring-stand">
+              <svg
+                viewBox={`0 0 ${RING.size} ${RING.size}`}
+                className="h-auto w-full overflow-visible"
+                role="radiogroup"
+                aria-label="Delivery hall"
+              >
+              {/* the loop road, set like a watch face: champagne chapter ring,
+                  faint road bed, minute-track ticks */}
               <circle
                 cx={RING.cx}
                 cy={RING.cy}
                 r={RING.radius}
                 fill="none"
-                stroke="#1c5641"
-                strokeWidth="2"
+                stroke="#d3b778"
+                strokeWidth="1.25"
+                strokeOpacity="0.55"
               />
               <circle
                 cx={RING.cx}
                 cy={RING.cy}
                 r={RING.radius}
                 fill="none"
-                stroke="#0e6e4e"
-                strokeWidth="12"
-                strokeOpacity="0.16"
+                stroke="#f6f1e7"
+                strokeWidth="14"
+                strokeOpacity="0.04"
+              />
+              <circle
+                cx={RING.cx}
+                cy={RING.cy}
+                r={RING.radius - 13}
+                fill="none"
+                stroke="#d3b778"
+                strokeWidth="5"
+                strokeOpacity="0.28"
+                strokeDasharray="1 11.2"
               />
 
               {/* spurs to the off-loop halls */}
@@ -139,8 +149,9 @@ export function DeliveryRing() {
                     y1={inner.y}
                     x2={outer.x}
                     y2={outer.y}
-                    stroke="#1c5641"
-                    strokeWidth="1.5"
+                    stroke="#f6f1e7"
+                    strokeOpacity="0.22"
+                    strokeWidth="1.25"
                     strokeDasharray="3 4"
                   />
                 );
@@ -153,25 +164,82 @@ export function DeliveryRing() {
                   d={routePath(selected)}
                   className="route-line"
                   fill="none"
-                  stroke="#17a673"
-                  strokeWidth="3.5"
+                  stroke="#d3b778"
+                  strokeWidth="3"
                   strokeLinecap="round"
                   pathLength={1}
                 />
               )}
 
-              {/* PFC, at the ring's entrance */}
+              {/* The complication: live readout in the dial centre. Decorative —
+                  the readout card is the accessible surface. */}
+              <g aria-hidden="true" className="select-none">
+                {selected ? (
+                  <>
+                    <text
+                      x={RING.cx}
+                      y={RING.cy - 34}
+                      textAnchor="middle"
+                      style={{ fontFamily: "var(--font-body)", letterSpacing: "0.3em" }}
+                      fontSize="13"
+                      fontWeight="600"
+                      fill="#f6f1e7"
+                      fillOpacity="0.55"
+                    >
+                      {selected.code}
+                    </text>
+                    <text
+                      x={RING.cx}
+                      y={RING.cy + 22}
+                      textAnchor="middle"
+                      style={{ fontFamily: "var(--font-display)" }}
+                      fontSize="64"
+                      fontWeight="600"
+                      fill="#d3b778"
+                    >
+                      {etaFor(selected)}
+                    </text>
+                    <text
+                      x={RING.cx}
+                      y={RING.cy + 48}
+                      textAnchor="middle"
+                      style={{ fontFamily: "var(--font-body)", letterSpacing: "0.28em" }}
+                      fontSize="11"
+                      fontWeight="600"
+                      fill="#d3b778"
+                      fillOpacity="0.8"
+                    >
+                      MINUTES
+                    </text>
+                  </>
+                ) : (
+                  <text
+                    x={RING.cx}
+                    y={RING.cy + 5}
+                    textAnchor="middle"
+                    style={{ fontFamily: "var(--font-body)", letterSpacing: "0.34em" }}
+                    fontSize="14"
+                    fontWeight="600"
+                    fill="#f6f1e7"
+                    fillOpacity="0.28"
+                  >
+                    PAN LOOP
+                  </text>
+                )}
+              </g>
+
+              {/* PFC, at the ring's entrance — the crown of the dial */}
               <g>
-                <circle cx={pfc.x} cy={pfc.y} r="9" fill="#c8a24a" />
-                <circle cx={pfc.x} cy={pfc.y} r="15" fill="none" stroke="#c8a24a" strokeOpacity="0.4" strokeWidth="1.5" />
+                <circle cx={pfc.x} cy={pfc.y} r="9" fill="#d3b778" />
+                <circle cx={pfc.x} cy={pfc.y} r="15" fill="none" stroke="#d3b778" strokeOpacity="0.4" strokeWidth="1.25" />
                 <text
-                  x={pfc.x - 20}
-                  y={pfc.y + 6}
+                  x={pfc.x - 22}
+                  y={pfc.y + 5}
                   textAnchor="end"
-                  className="font-mono"
-                  fontSize="17"
-                  fontWeight="600"
-                  fill="#c8a24a"
+                  style={{ fontFamily: "var(--font-body)", letterSpacing: "0.18em" }}
+                  fontSize="13"
+                  fontWeight="700"
+                  fill="#d3b778"
                 >
                   PFC
                 </text>
@@ -211,34 +279,45 @@ export function DeliveryRing() {
                       cy={p.y}
                       r="18"
                       fill="none"
-                      stroke="#17a673"
+                      stroke="#d3b778"
                       strokeWidth="2"
                     />
                     <circle
                       cx={p.x}
                       cy={p.y}
                       r={isSelected ? 11 : 7}
-                      fill={isSelected ? "#17a673" : "#0a2a20"}
-                      stroke={isSelected ? "#17a673" : "#1c5641"}
-                      strokeWidth="2"
+                      fill={isSelected ? "#d3b778" : "#1d1712"}
+                      stroke={isSelected ? "#d3b778" : "#f6f1e7"}
+                      strokeOpacity={isSelected ? 1 : 0.45}
+                      strokeWidth="1.5"
                       className="transition-all duration-200"
                     />
                     <text
                       x={lp.x}
                       y={lp.y + 5}
                       textAnchor={east ? "start" : "end"}
-                      className="font-mono select-none"
-                      fontSize="17"
-                      fontWeight={isSelected ? 700 : 500}
-                      fill={isSelected ? "#17a673" : "#e8f2ec"}
-                      fillOpacity={isSelected ? 1 : 0.55}
+                      className="select-none"
+                      style={{ fontFamily: "var(--font-body)", letterSpacing: "0.12em" }}
+                      fontSize="13"
+                      fontWeight={isSelected ? 700 : 600}
+                      fill={isSelected ? "#d3b778" : "#f6f1e7"}
+                      fillOpacity={isSelected ? 1 : 0.65}
                     >
                       {hall.code}
                     </text>
                   </g>
                 );
               })}
-            </svg>
+              </svg>
+            </div>
+
+            {/* Ground shadow for the 3D entrance — invisible at rest (the
+                keyframes own its opacity); invisible everywhere the entrance
+                doesn't run. */}
+            <div
+              aria-hidden="true"
+              className="ring-ground mx-auto -mt-4 h-6 w-2/3 rounded-[100%] bg-black opacity-0 blur-xl"
+            />
 
             {/* The same options as a native control, for assistive tech that
                 can't make sense of the SVG — and visible below 640px, where the
@@ -273,41 +352,41 @@ export function DeliveryRing() {
               <>
                 <p className="eyebrow mb-3">Delivering to</p>
                 <p className="h3">{selected.name}</p>
-                <p className="data mt-1 text-jade-mist/45">
+                <p className="data mt-1.5 text-sm text-linen-2">
                   {selected.code} · {selected.tier === 1 ? "on the loop" : "off the loop"}
                 </p>
 
-                <dl className="mt-6 space-y-3 border-t border-hairline pt-5">
+                <dl className="mt-6 space-y-3 border-t border-line pt-5">
                   <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-sm text-jade-mist/65">Estimated</dt>
-                    <dd className="data text-emerald-lit">{etaFor(selected)} min</dd>
+                    <dt className="text-sm text-linen-2">Estimated</dt>
+                    <dd className="data text-champagne">{etaFor(selected)} min</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-sm text-jade-mist/65">Delivery</dt>
-                    <dd className="data text-brass">{rupees(deliveryFeeFor(selected))}</dd>
+                    <dt className="text-sm text-linen-2">Delivery</dt>
+                    <dd className="price text-[1.0625rem]">{rupees(deliveryFeeFor(selected))}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-sm text-jade-mist/65">Packaging</dt>
-                    <dd className="data text-brass">{rupees(PACKAGING_FEE)}</dd>
+                    <dt className="text-sm text-linen-2">Packaging</dt>
+                    <dd className="price text-[1.0625rem]">{rupees(PACKAGING_FEE)}</dd>
                   </div>
                 </dl>
 
-                <p className="mt-5 text-xs leading-relaxed text-jade-mist/40">
-                  Fees are placeholders — the two public sources disagree (₹30 vs ~₹15). ETA is
-                  derived from ring distance, not measured.
+                <p className="mt-5 text-xs leading-relaxed text-linen-2">
+                  Fees are placeholders — the two public sources disagree (₹30 vs ~₹15). Arrival
+                  time is derived from ring distance, not measured.
                 </p>
 
                 <a href="#menu" className="btn btn-primary mt-6 w-full">
-                  Add something to the cart
+                  Add to the order
                 </a>
               </>
             ) : (
               <>
-                <p className="eyebrow mb-3">No hall picked</p>
+                <p className="eyebrow mb-3">No hall selected</p>
                 <p className="h3">Choose where this is going.</p>
-                <p className="mt-3 text-jade-mist/65">
-                  Tap a node, or use the arrow keys to walk the ring. Patel, Azad and Nehru are the
-                  three closest — they sit on the loop itself.
+                <p className="mt-3 text-linen-2">
+                  Tap a point on the dial, or walk it with the arrow keys. Patel, Azad and Nehru
+                  sit on the loop itself — they are the three closest.
                 </p>
                 <button
                   type="button"

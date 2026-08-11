@@ -13,6 +13,9 @@ Thumbs.db
 
 .claude/
 
+# Scratch fontconfig from the canvas render probe — machine-local, not source.
+.fontconfig/
+
 # public/images/ IS committed — roughly 6.5MB of CC0 / Creative Commons
 # photography. It has to be in the repo or a build host deploys a site with no
 # pictures, since nothing runs `npm run images` during a build.

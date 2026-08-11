@@ -63,22 +63,28 @@ in the dish modal and the gallery lightbox.
 Downloaded originals are gitignored — run `npm run images` to recreate them. A dish with no
 image falls back to a drawn plate in the same palette, not a grey box.
 
-**The hero is the exception.** No CC-licensed photograph of the PFC storefront exists, so
-`public/images/hero-storefront.svg` is drawn in-repo from the building's description. To use
-a real photo, drop it in `public/images/` and change one line at the top of
-[`components/Hero.tsx`](components/Hero.tsx):
-
-```ts
-const HERO_PLATE = "/images/hero-storefront.svg";
-```
+**The hero is the exception.** No CC-licensed photograph of the PFC storefront exists.
+The hero uses the exterior photo from Restaurant Guru's public listing — fetched by a
+*pinned* job in the same script, recorded with `attributionRequired: true`, and credited
+visibly under the photo and on `/credits`. It is **not** openly licensed; the trade-off was
+made deliberately, and swapping in your own photo is one constant
+(`HERO_IMAGE_ID` in [`components/Hero.tsx`](components/Hero.tsx)) plus one record. The
+drawn storefront (`public/images/hero-storefront.svg`) remains as the committed fallback if
+the pinned fetch ever fails.
 
 ## Fonts
 
-`npm run fonts` pulls all three into `public/fonts/`: JetBrains Mono from Google Fonts
-(SIL OFL), Switzer and Gambarino from Fontshare's public CSS API (ITF Free Font License).
-They are declared with plain `@font-face` and a real fallback stack — **not**
-`next/font/local`, which fails the build outright when a file is missing. Delete
-`public/fonts/` and the site still runs, on the system stack.
+Three voices, all Google Fonts (SIL OFL), fetched by `npm run fonts`, per the
+[Gilded Survey philosophy](design/gilded-survey.md):
+
+- **Italiana** — engraved hairline capitals: the wordmark, display sizes, headings.
+- **Crimson Pro** — the reading voice: body serif, review quotes, and **every price**
+  (`.price` — money in the UI sans reads cheap; serif numerals read like a menu).
+- **Instrument Sans** — the instrument labels: buttons, eyebrows, data (tabular figures).
+
+All declared with plain `@font-face` and real fallback stacks — **not** `next/font/local`,
+which fails the build outright when a file is missing. Delete `public/fonts/` and the site
+still runs.
 
 ## Testing the error paths
 
@@ -116,11 +122,26 @@ through `@theme` in CSS. No animation library, no component library, no state li
 
 ### Decisions worth knowing
 
+**The design follows the Gilded Survey philosophy** ([manifesto](design/gilded-survey.md),
+[Plate I](design/gilded-survey.png)): layered espresso grounds that are never one flat
+hex — the body carries a fixed champagne-breath radial over a tonal vertical wash —
+champagne metal (`#D3B778`, ~9:1 on espresso) applied thin, linen text, hairline rules,
+and a centred, formal hero with the foil wordmark written on the storefront photograph.
+Errors use `--oxide #E4573B`, the only non-metal accent.
+
+**The 3D is CSS, not WebGL.** Pointer-tracked perspective tilt with a specular highlight
+and layered shadows on dish/spotlight cards ([`components/ui/Tilt.tsx`](components/ui/Tilt.tsx)),
+a scroll-driven "stand up off the counter" entrance on the delivery dial, and an extruded
+text-shadow wordmark. WebGL was rejected: 150KB+ of runtime, no free photorealistic
+Indian-food models, and it janks the mid-range Androids this audience holds. All of it is
+gated behind `(hover: hover)` and `prefers-reduced-motion`.
+
 **Motion is native CSS scroll-driven animation**, not a library — it runs on the compositor,
 which is what keeps it smooth on the mid-range Android most of this audience is holding.
-`animation-range` is left at its default: Firefox ships `animation-timeline` (132+) but not
-full `animation-range` support, and a custom range there animates over the wrong window,
-which reads as broken where an absent animation reads as fine.
+The ring's 3D entrance is guarded on `@supports (animation-range: entry)` specifically:
+Firefox ships `animation-timeline` (132+) but not full `animation-range`, and a custom
+range there animates over the wrong window — so Firefox gets a flat ring, which reads as
+fine where a wrong-windowed tilt reads as broken.
 
 **Filters sync to the URL with `history.replaceState`**, not `useSearchParams` — the latter
 needs a Suspense boundary or the production build fails at prerender. Same shareable link.
@@ -137,9 +158,9 @@ state change regardless, so a tab that isn't producing frames can't strand the m
 correctly rounded and Node and Chrome differ in the last ULP — which surfaces as a hydration
 mismatch on every SVG coordinate.
 
-**`--chilli` marks, `--chilli-lit` speaks.** Against `--ink`, `#C2361F` measures 3.3:1 —
-fine for the veg/non-veg square and spice pips at the 3:1 graphical threshold, failing for
-text at 4.5:1. `#E4573B` is 4.9:1 and carries any chilli-coloured text.
+**The veg/non-veg mark keeps its legal colours.** It is a marking under India's food
+labelling regulations, not a style choice — the green square survives the single-accent
+palette on purpose.
 
 **The hall `<select>` is visible below 640px.** The ring scales to 328px there and its nodes
 fall to ~33px, under the 44px touch target. Above 640px the dial is the full-size control and
@@ -147,10 +168,10 @@ the select collapses to screen-reader-only.
 
 ### Measured, not claimed
 
-Route JS for `/` is **165 KB gzipped** across 6 chunks (537 KB raw). The brief asked for
-under 120 KB; Next 16 and React 19 consume most of that before this site's own code exists,
-so the number is reported rather than asserted. Dropping framer-motion/GSAP — which this
-build never installs — was where the real saving was.
+Route JS for `/` is **~165 KB gzipped** across 6 chunks. The original brief asked for under
+120 KB; Next 16 and React 19 consume most of that before this site's own code exists, so the
+number is reported rather than asserted. The redesign added no dependencies — the 3D, the
+type system and the palette are CSS.
 
 ---
 

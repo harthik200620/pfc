@@ -15,10 +15,10 @@ export function Stepper({ value, onChange, label, min = 0, max = 99, size = "md"
   const dim = "h-11 w-11";
   const gap = size === "sm" ? "w-7" : "w-8";
   return (
-    <div className="inline-flex items-center rounded-full border border-hairline bg-ink">
+    <div className="inline-flex items-center rounded border border-line bg-espresso-3">
       <button
         type="button"
-        className={`${dim} grid place-items-center rounded-full text-jade-mist transition-colors hover:text-emerald-lit disabled:opacity-35`}
+        className={`${dim} grid place-items-center rounded text-linen transition-colors hover:text-champagne disabled:opacity-35`}
         onClick={() => onChange(Math.max(min, value - 1))}
         disabled={value <= min}
         aria-label={`Remove one ${label}`}
@@ -32,7 +32,7 @@ export function Stepper({ value, onChange, label, min = 0, max = 99, size = "md"
       </span>
       <button
         type="button"
-        className={`${dim} grid place-items-center rounded-full text-jade-mist transition-colors hover:text-emerald-lit disabled:opacity-35`}
+        className={`${dim} grid place-items-center rounded text-linen transition-colors hover:text-champagne disabled:opacity-35`}
         onClick={() => onChange(Math.min(max, value + 1))}
         disabled={value >= max}
         aria-label={`Add one ${label}`}

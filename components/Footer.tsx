@@ -36,27 +36,32 @@ export function Footer() {
   }
 
   return (
-    <footer className="hairline mt-10">
-      <div className="shell py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="mt-12 border-t border-line bg-espresso-2">
+      <div className="shell py-16">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="font-display text-3xl">PFC</p>
-            <p className="data mt-1 text-brass">PAN LOOP</p>
-            <p className="mt-4 max-w-[28ch] text-sm text-jade-mist/60">{SITE.fullName}, Oval 3, at the entrance to the loop.</p>
+            <p className="brand foil w-fit text-3xl">PFC</p>
+            <div className="metal-rule mt-3" aria-hidden="true" />
+            <p className="mt-4 text-[0.6875rem] font-semibold uppercase tracking-[0.28em] text-champagne">
+              Pan Loop Fast Food Center
+            </p>
+            <p className="mt-4 max-w-[28ch] text-sm leading-relaxed text-linen-2">
+              Oval 3, at the entrance to the loop.
+            </p>
           </div>
 
           <nav aria-label="Footer">
-            <h2 className="eyebrow mb-4">Pages</h2>
-            <ul className="space-y-2">
+            <h2 className="eyebrow mb-5">Pages</h2>
+            <ul className="space-y-2.5">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-sm text-jade-mist/70 hover:text-emerald-lit">
+                  <a href={link.href} className="text-sm text-linen-2 transition-colors hover:text-champagne">
                     {link.label}
                   </a>
                 </li>
               ))}
               <li>
-                <Link href="/credits" className="text-sm text-jade-mist/70 hover:text-emerald-lit">
+                <Link href="/credits" className="text-sm text-linen-2 transition-colors hover:text-champagne">
                   Image credits
                 </Link>
               </li>
@@ -64,16 +69,19 @@ export function Footer() {
           </nav>
 
           <div>
-            <h2 className="eyebrow mb-4">Hours &amp; phone</h2>
-            <ul className="data space-y-1.5 text-jade-mist/70">
+            <h2 className="eyebrow mb-5">Hours &amp; phone</h2>
+            <ul className="data space-y-2 text-sm text-linen-2">
               {WINDOW_LABELS.map((label) => (
                 <li key={label}>{label}</li>
               ))}
             </ul>
-            <ul className="mt-3 space-y-1.5">
+            <ul className="mt-4 space-y-2">
               {SITE.phones.map((phone) => (
                 <li key={phone}>
-                  <a href={`tel:${phone.replace(/\s/g, "")}`} className="data text-emerald-lit hover:underline">
+                  <a
+                    href={`tel:${phone.replace(/\s/g, "")}`}
+                    className="data text-sm text-champagne underline underline-offset-4 hover:text-linen"
+                  >
                     {phone}
                   </a>
                 </li>
@@ -82,11 +90,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h2 className="eyebrow mb-4">When the board changes</h2>
+            <h2 className="eyebrow mb-5">When the board changes</h2>
             {done ? (
-              <p className="text-sm text-emerald-lit">
-                Done. You&apos;ll hear when something new goes up.
-              </p>
+              <p className="text-sm text-linen-2">Noted. You&apos;ll hear when something new goes up.</p>
             ) : (
               <form onSubmit={onSubmit} noValidate>
                 <label htmlFor="newsletter" className="sr-only">
@@ -106,7 +112,7 @@ export function Footer() {
                   aria-describedby={error ? "newsletter-error" : undefined}
                 />
                 {error && (
-                  <p id="newsletter-error" className="mt-1.5 text-sm text-chilli-lit">
+                  <p id="newsletter-error" className="mt-1.5 text-sm text-oxide">
                     {error}
                   </p>
                 )}
@@ -118,13 +124,14 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="hairline mt-12 pt-6">
-          <p className="max-w-[70ch] text-xs leading-relaxed text-jade-mist/45">
+        <div className="mt-14 border-t border-line pt-6">
+          <p className="max-w-[72ch] text-xs leading-relaxed text-linen-2">
             Student-built and not officially affiliated with PFC or with IIT Kharagpur. Prices,
-            delivery fees and ETAs on this site are placeholders and are not quoted by the
-            restaurant. Nothing here places a real order. Photographs are used under CC0 or
-            Creative Commons licences — see{" "}
-            <Link href="/credits" className="underline hover:text-emerald-lit">
+            delivery fees and arrival times on this site are placeholders and are not quoted by
+            the restaurant. Nothing here places a real order. Photographs are used under CC0 or
+            Creative Commons licences, except the storefront photo, which is credited to its
+            source — see{" "}
+            <Link href="/credits" className="underline hover:text-champagne">
               credits
             </Link>
             .

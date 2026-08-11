@@ -39,6 +39,36 @@ const force = process.argv.includes("--force");
 const onlyArg = process.argv.find((a) => a.startsWith("--only="));
 const only = onlyArg ? onlyArg.slice("--only=".length) : null;
 
+// Browser UA for pinned downloads — image CDNs often refuse script UAs.
+const BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+// ---------------------------------------------------------------------------
+// PINNED jobs: exact URLs instead of a licence-filtered search. Used only for
+// the hero — the real PFC storefront exists nowhere under an open licence, and
+// the user chose to use Restaurant Guru's exterior photo with a visible credit
+// after that trade-off was raised. Provenance is recorded honestly: this one
+// is NOT openly licensed, and the credit line renders on the hero and on
+// /credits like every other image.
+// ---------------------------------------------------------------------------
+const PINNED = [
+  {
+    id: "hero-pfc",
+    bucket: "hero",
+    urls: [
+      "https://img02.restaurantguru.com/c647-P-F-C-Kharagpur-exterior.jpg",
+      "https://img02.restaurantguru.com/c808-P-F-C-Kharagpur-facade.jpg",
+      "https://img02.restaurantguru.com/ccd7-Restaurant-P-F-C-facade.jpg",
+    ],
+    sourceUrl: "https://restaurant-guru.in/PAN-Loop-Food-Centre-Kharagpur",
+    license: "© rights reserved — used with credit",
+    licenseUrl: "https://restaurant-guru.in/PAN-Loop-Food-Centre-Kharagpur",
+    creator: "via Restaurant Guru",
+    attributionRequired: true,
+    maxWidth: 1920,
+  },
+];
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function exists(p) {
@@ -137,8 +167,10 @@ async function fromCommons(query) {
 
 // ------------------------------------------------------------ processing ----
 
-async function downloadAndProcess(found, outPath) {
-  const res = await fetch(found.downloadUrl, { headers: { "User-Agent": UA } });
+async function downloadAndProcess(found, outPath, maxWidth = 1600) {
+  const res = await fetch(found.downloadUrl, {
+    headers: { "User-Agent": found.browserUA ? BROWSER_UA : UA },
+  });
   if (!res.ok) throw new Error(`download ${res.status}`);
   const buf = Buffer.from(await res.arrayBuffer());
 
@@ -146,8 +178,8 @@ async function downloadAndProcess(found, outPath) {
   // AVIF/WebP conversion at request time, so there is nothing to gain from
   // keeping a 6000px source in the repo.
   const pipeline = sharp(buf).rotate().resize({
-    width: 1600,
-    height: 1600,
+    width: maxWidth,
+    height: maxWidth,
     fit: "inside",
     withoutEnlargement: true,
   });
@@ -222,12 +254,80 @@ async function resolveOne(job, records) {
   }
 }
 
+async function resolvePinned(job, records) {
+  const dir = path.join(ROOT, "public", "images", job.bucket);
+  const file = path.join(dir, `${job.id}.jpg`);
+  const publicPath = `/images/${job.bucket}/${job.id}.jpg`;
+
+  if (!force && (await exists(file)) && records[job.id]) {
+    console.log(`  skip   ${job.id} (already present)`);
+    return records[job.id];
+  }
+
+  // Try EVERY pinned URL and keep the largest — this image goes full-bleed
+  // behind the hero, so resolution is the tiebreak, not order.
+  let best = null;
+  for (const url of job.urls) {
+    try {
+      const res = await fetch(url, { headers: { "User-Agent": BROWSER_UA } });
+      if (!res.ok) throw new Error(`download ${res.status}`);
+      const buf = Buffer.from(await res.arrayBuffer());
+      const meta = await sharp(buf).metadata();
+      const px = (meta.width ?? 0) * (meta.height ?? 0);
+      console.log(`  cand   ${job.id}  ${meta.width}x${meta.height}  ${url.slice(-40)}`);
+      if (!best || px > best.px) best = { buf, px };
+    } catch (err) {
+      console.log(`  warn   ${job.id} — ${url.slice(0, 60)}… ${err.message}`);
+    }
+  }
+
+  if (!best) {
+    console.log(`  MISS   ${job.id} — every pinned URL failed; the drawn hero stays`);
+    return null;
+  }
+
+  // The largest exterior that exists is ~834px and it goes full-bleed, so this
+  // is the one place upscaling is allowed: lanczos3 + a controlled sharpen +
+  // slight saturation lift buys real perceived quality; the hero's dark grade
+  // does the rest.
+  const pipeline = sharp(best.buf)
+    .rotate()
+    .resize({
+      width: 1600,
+      height: 1600,
+      fit: "inside",
+      kernel: "lanczos3",
+      withoutEnlargement: false,
+    })
+    .sharpen({ sigma: 1.2 })
+    .modulate({ saturation: 1.06 });
+  const { data, info } = await pipeline
+    .jpeg({ quality: 80, mozjpeg: true })
+    .toBuffer({ resolveWithObject: true });
+  await writeFile(file, data);
+  const blur = await sharp(data).resize(20, 20, { fit: "inside" }).webp({ quality: 40 }).toBuffer();
+
+  console.log(`  ok     ${job.id}  pinned (largest)  ${info.width}x${info.height}`);
+  return {
+    src: publicPath,
+    width: info.width,
+    height: info.height,
+    blurDataURL: `data:image/webp;base64,${blur.toString("base64")}`,
+    sourceUrl: job.sourceUrl,
+    license: job.license,
+    licenseUrl: job.licenseUrl,
+    creator: job.creator,
+    attributionRequired: job.attributionRequired,
+  };
+}
+
 async function main() {
   const { DISHES } = await importFile(ROOT, "data", "menu.ts");
   const { GALLERY } = await importFile(ROOT, "data", "gallery.ts");
 
   await mkdir(path.join(ROOT, "public", "images", "dishes"), { recursive: true });
   await mkdir(path.join(ROOT, "public", "images", "gallery"), { recursive: true });
+  await mkdir(path.join(ROOT, "public", "images", "hero"), { recursive: true });
 
   let records = {};
   try {
@@ -241,9 +341,21 @@ async function main() {
     ...DISHES.map((d) => ({ id: d.id, query: d.imageQuery, bucket: "dishes" })),
     ...GALLERY.map((g) => ({ id: g.id, query: g.query, bucket: "gallery" })),
   ];
-  if (only) jobs = jobs.filter((j) => j.id === only);
+  let pinned = [...PINNED];
+  if (only) {
+    jobs = jobs.filter((j) => j.id === only);
+    pinned = pinned.filter((j) => j.id === only);
+  }
 
-  console.log(`\nFetching ${jobs.length} images (CC0 first, Commons fallback)...\n`);
+  console.log(
+    `\nFetching ${jobs.length} searched + ${pinned.length} pinned images (CC0 first, Commons fallback)...\n`,
+  );
+
+  for (const job of pinned) {
+    const record = await resolvePinned(job, records);
+    if (record) records[job.id] = record;
+    else delete records[job.id];
+  }
 
   for (const [i, job] of jobs.entries()) {
     const record = await resolveOne(job, records);

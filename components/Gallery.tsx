@@ -45,10 +45,13 @@ export function Gallery() {
   return (
     <section className="section" aria-labelledby="gallery-heading">
       <div className="shell">
-        <p className="eyebrow mb-4">Gallery</p>
-        <h2 id="gallery-heading" className="h2 max-w-[16ch]">
-          The arena, the counter, the plate.
-        </h2>
+        <div className="text-center">
+          <p className="eyebrow mb-5">Gallery</p>
+          <h2 id="gallery-heading" className="h2 mx-auto max-w-[20ch]">
+            The arena, the counter, the plate.
+          </h2>
+          <div className="metal-rule mx-auto mt-6" aria-hidden="true" />
+        </div>
 
         <div className="mt-10 columns-2 gap-4 lg:columns-3 [&>*]:mb-4">
           {ITEMS.map((item, i) => {
@@ -74,7 +77,7 @@ export function Gallery() {
                   blurDataURL={record.blurDataURL}
                   className="h-auto w-full transition-transform duration-620 ease-entrance group-hover:scale-[1.04]"
                 />
-                <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/90 to-transparent p-3 pt-10 text-sm text-jade-mist">
+                <span className="serif-italic pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-espresso/90 to-transparent p-3.5 pt-12 text-[0.9375rem] text-linen">
                   {item.caption}
                 </span>
               </button>
@@ -84,7 +87,7 @@ export function Gallery() {
       </div>
 
       {active && activeImage && (
-        <div className="anim-fade fixed inset-0 z-[110] grid place-items-center bg-ink/95 p-4 backdrop-blur-md">
+        <div className="anim-fade fixed inset-0 z-[110] grid place-items-center bg-espresso/97 p-4">
           <div role="dialog" aria-modal="true" aria-label={active.caption} className="relative w-full max-w-4xl">
             <Image
               src={activeImage.src}
@@ -97,13 +100,13 @@ export function Gallery() {
 
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
               <div>
-                <p className="text-sm text-jade-mist">{active.caption}</p>
+                <p className="serif-italic text-[0.9375rem] text-linen">{active.caption}</p>
                 {activeImage.attributionRequired && (
-                  <p className="mt-1 text-xs text-jade-mist/45">
+                  <p className="mt-1 text-xs text-linen-2">
                     Photo: {activeImage.creator} ·{" "}
                     <a
                       href={activeImage.licenseUrl}
-                      className="underline hover:text-emerald-lit"
+                      className="underline hover:text-champagne"
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -112,7 +115,7 @@ export function Gallery() {
                     ·{" "}
                     <a
                       href={activeImage.sourceUrl}
-                      className="underline hover:text-emerald-lit"
+                      className="underline hover:text-champagne"
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -131,7 +134,7 @@ export function Gallery() {
                 >
                   ‹
                 </button>
-                <span className="data text-jade-mist/45">
+                <span className="data text-linen-2">
                   {index! + 1}/{ITEMS.length}
                 </span>
                 <button

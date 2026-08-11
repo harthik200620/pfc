@@ -8,13 +8,40 @@ import { useCart } from "@/components/providers/CartProvider";
 export function Nav() {
   const [stuck, setStuck] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
   const sentinel = useRef<HTMLDivElement>(null);
   const overlay = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const { count, openCart } = useCart();
 
+  // Scroll-spy: one observer over the four target sections; the entry nearest
+  // the top of the viewport wins the gold underline.
+  useEffect(() => {
+    const sections = NAV_LINKS.map((l) => document.querySelector(l.href)).filter(
+      (el): el is Element => Boolean(el),
+    );
+    if (sections.length === 0) return;
+
+    const visible = new Set<string>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = `#${entry.target.id}`;
+          if (entry.isIntersecting) visible.add(id);
+          else visible.delete(id);
+        }
+        // Preserve document order when several are on screen.
+        const first = NAV_LINKS.find((l) => visible.has(l.href));
+        setActive(first ? first.href : null);
+      },
+      { rootMargin: "-25% 0px -55% 0px" },
+    );
+    sections.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   // IntersectionObserver on a 1px sentinel rather than a scroll listener —
-  // no work on the main thread while the menu data hydrates.
+  // no main-thread work while the menu data hydrates.
   useEffect(() => {
     const node = sentinel.current;
     if (!node) return;
@@ -75,26 +102,43 @@ export function Nav() {
 
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-320 ${
-          stuck ? "border-b border-hairline bg-ink/80 backdrop-blur-xl" : "border-b border-transparent"
+          stuck
+            ? "border-b border-line bg-espresso/85 backdrop-blur-xl"
+            : "border-b border-transparent"
         }`}
       >
         <nav className="shell flex h-16 items-center justify-between gap-4" aria-label="Primary">
-          <a href="#top" className="flex items-baseline gap-2 font-display text-2xl tracking-tight">
-            PFC
-            <span className="data hidden text-[0.625rem] text-brass sm:inline">PAN LOOP</span>
+          <a href="#top" className="flex items-baseline gap-3">
+            <span className="brand text-[1.375rem] text-linen">PFC</span>
+            <span className="hidden text-[0.5625rem] font-semibold uppercase tracking-[0.3em] text-champagne sm:inline">
+              Pan Loop
+            </span>
           </a>
 
-          <ul className="hidden items-center gap-7 md:flex">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="text-sm font-medium text-jade-mist/80 transition-colors hover:text-emerald-lit"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+          <ul className="hidden items-center gap-8 md:flex">
+            {NAV_LINKS.map((link) => {
+              const isActive = active === link.href;
+              return (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    aria-current={isActive ? "true" : undefined}
+                    onClick={() => setActive(link.href)}
+                    className={`relative py-2 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] transition-colors hover:text-champagne ${
+                      isActive ? "text-linen" : "text-linen/70"
+                    }`}
+                  >
+                    {link.label}
+                    <span
+                      aria-hidden="true"
+                      className={`absolute inset-x-0 -bottom-0.5 h-0.5 origin-left bg-champagne transition-transform duration-320 ease-entrance ${
+                        isActive ? "scale-x-100" : "scale-x-0"
+                      }`}
+                    />
+                  </a>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="flex items-center gap-2 sm:gap-3">
@@ -117,7 +161,7 @@ export function Nav() {
                 <circle cx="7.2" cy="15" r="1.4" fill="currentColor" />
                 <circle cx="13.4" cy="15" r="1.4" fill="currentColor" />
               </svg>
-              <span className="data" aria-hidden="true">
+              <span key={count} className="data anim-beat inline-block" aria-hidden="true">
                 {count}
               </span>
             </button>
@@ -153,7 +197,7 @@ export function Nav() {
         <div
           ref={overlay}
           id="mobile-menu"
-          className="anim-fade fixed inset-0 z-40 bg-ink/97 backdrop-blur-xl md:hidden"
+          className="anim-fade fixed inset-0 z-40 bg-espresso/97 backdrop-blur-xl md:hidden"
         >
           <div className="shell flex h-full flex-col justify-center gap-2 pb-24">
             <ul className="stagger flex flex-col gap-1">
@@ -162,7 +206,7 @@ export function Nav() {
                   <a
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="block py-3 font-display text-5xl tracking-tight transition-colors hover:text-emerald-lit"
+                    className="brand block py-3 text-5xl text-linen transition-colors hover:text-champagne"
                   >
                     {link.label}
                   </a>

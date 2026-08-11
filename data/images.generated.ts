@@ -359,6 +359,17 @@ export const IMAGES: Record<string, ImageRecord> = {
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
     "creator": "Andy Mabbett",
     "attributionRequired": true
+  },
+  "hero-pfc": {
+    "src": "/images/hero/hero-pfc.jpg",
+    "width": 1600,
+    "height": 1237,
+    "blurDataURL": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAADQAwCdASoUAA8APu1iqU2ppaOiMAgBMB2JbAC7H8Agsg7zZTKt2IAA/vEgtHhCptIWSkX13W2xmW1de7IXVrXo7vPm3xHhZbXopkVyu5kqaLTEESUxWsJFs8wIQpElRzAcNJbsBpY9GTQZ34yFI4vY+Z/PD75NJvtHTRn+aKo5UjEbeIYloof7LtzvF7YyF/3/JBW/5NmxX1TJuujzhWDOwb9MGsAA",
+    "sourceUrl": "https://restaurant-guru.in/PAN-Loop-Food-Centre-Kharagpur",
+    "license": "© rights reserved — used with credit",
+    "licenseUrl": "https://restaurant-guru.in/PAN-Loop-Food-Centre-Kharagpur",
+    "creator": "via Restaurant Guru",
+    "attributionRequired": true
   }
 };
 
